@@ -1,43 +1,111 @@
 #include <Arduino.h>
+#include <WiFi.h>
+#include <WebServer.h>
 
-unsigned long waitTime = 1000; //what does this do?
-unsigned long lastUpdateTime = 0;
+//Motor A pins
+#define PWMA 25
+#define AIN1 21
+#define AIN2 17
 
-int rotation = 0;
-int limit = 10;
+//Motor B pins
+#define PWMB 26
+#define BIN1 22
+#define BIN2 23
 
-void printStatus() {
-  Serial.println(rotation);
+//Wifi Access point credentials
+const char* apSSID = "RoverArm";
+const char* apPassword = "rover1234";
 
-  if (rotation >= limit){
-  Serial.println("WARNING: limit reached! Enter 'R' to reset");
+WebServer server(80);
+void setMotorA(int speed) {
+  //speed: -255 (full reverse) to 255 (full forward)
+  if (speed > 0) {
+    digitalWrite(AIN1, HIGH);
+    digitalWrite(AIN2, LOW);
+  }else if (speed < 0) {
+    digitalWrite(AIN1, LOW);
+    digitalWrite(AIN2, HIGH);
   }else {
-    Serial.println("OK - Within Range");
+    digitalWrite(AIN1, LOW);
+    digitalWrite(AIN2, LOW);
   }
+  analogWrite(PWMA, abs(speed));  //abs() strips the negative
 }
 
-void checkForReset() {
-  if (Serial.available() > 0) {
-    String input = Serial.readStringUntil('\n');
-    if (input == "R" or input == "r") { 
-      Serial.println("Resetting...");
-      rotation = 0;
-      Serial.println("Reset Complete.");
-    }
+void setMotorB(int speed) {
+  if (speed > 0) {
+    digitalWrite(BIN1, HIGH);
+    digitalWrite(BIN2, LOW);
+  }else if (speed < 0) {
+    digitalWrite(BIN1, LOW);
+    digitalWrite(BIN2, HIGH);
+  }else {
+    digitalWrite(BIN1, LOW);
+    digitalWrite(BIN2, LOW);
   }
+  analogWrite(PWMB, abs(speed));
 }
+
+const char* htmlPage = R"(
+<!DOCTYPE html>
+<html>
+<head><title>Rover Control</title></head>
+<body style="text-align:center; font-family:sans-serif;">
+  <h1>Rover Control</h1>
+ <p><a href="/forward"><button style="font-size:24px; padding:20px;">Forward</button></a></p>
+  <p><a href="/backward"><button style="font-size:24px; padding:20px;">Backward</button></a></p>
+  <p><a href="/stop"><button style="font-size:24px; padding:20px;">STOP</button></a></p>
+</body>
+</html>
+)";
+
+void handleRoot() {
+  server.send(200, "text/html", htmlPage);
+}
+
+void handleForward() {
+  setMotorA(150);
+  setMotorB(150);
+  server.send(200, "text/html", htmlPage);
+}
+
+void handleBackward() {
+  setMotorA(-150);
+  setMotorB(-150);
+  server.send(200, "text/html", htmlPage);
+}
+
+void handleStop() {
+  setMotorA(0);
+  setMotorB(0);
+  server.send(200, "text/html", htmlPage);
+}
+
 void setup() {
   // put your setup code here, to run once:
-Serial.begin(115200);
+  Serial.begin(115200);
+
+  pinMode(AIN1, OUTPUT);
+  pinMode(AIN2, OUTPUT);
+  pinMode(PWMA, OUTPUT);
+  pinMode(BIN1, OUTPUT);
+  pinMode(BIN2, OUTPUT);
+  pinMode(PWMB, OUTPUT);
+
+  WiFi.softAP(apSSID, apPassword); //turn ESP into its own WiFi
+  IPAddress ip = WiFi.softAPIP();
+  Serial.print("Acess Point started. Connect to WiFi: ");
+  Serial.println(apSSID);
+  Serial.print("Then go to: http://");
+  Serial.println(ip);
+
+  server.on("/", handleRoot);
+  server.on("/forward", handleForward);
+  server.on("/backward", handleBackward);
+  server.on("/stop", handleStop);
+  server.begin();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  checkForReset();
-  unsigned long currentTime = millis();
-  if (currentTime - lastUpdateTime >= waitTime) {
-    lastUpdateTime = currentTime;
-    rotation = rotation + 1;
-    printStatus();
-  }
+  server.handleClient(); //check for incoming button requests}
 }
