@@ -1,20 +1,27 @@
 #include <Arduino.h>
 
 int waitTime = 1000;
-int messageCount = 0;
-int limit = 5;
+int rotation = 0;
+int limit = 10;
 
 void printStatus() {
-  Serial.print("Message number: ");
-  Serial.println(messageCount);
+  Serial.println(rotation);
 
-if (messageCount >= limit){
-  Serial.println("WARNING: limit reached!");
+if (rotation >= limit){
+  Serial.println("WARNING: limit reached! Enter 'R' to reset");
+  if (Serial.available() > 0) {
+    String input = Serial.readStringUntil('\n');
+    if (input == "R" or input == "r") {
+      Serial.println("Resetting...");
+      delay(3000);
+      rotation = 0;
+      Serial.println("Reset Complete.");
+    }
+  }
 }else{
   Serial.println("OK - Within Range");
 }
 }
-
 void setup() {
   // put your setup code here, to run once:
 Serial.begin(115200);
@@ -22,7 +29,7 @@ Serial.begin(115200);
 
 void loop() {
   // put your main code here, to run repeatedly:
-  messageCount = messageCount + 1;
+  rotation = rotation + 1;
   printStatus();
   delay(waitTime);
 }
