@@ -21,12 +21,23 @@
 #define ID_ELBOW 3
 #define ID_WRIST 4
 
+//--------Jog control------------
+#define JOG_STEP 25 //position units added/removed per nudge
+#define JOG_SPEED 800 //speed at which the jog moves
+
+
 //Wifi Access point credentials
 const char* apSSID = "RoverArm";
 const char* apPassword = "rover1234";
 
 WebServer server(80);
 SMS_STS servos;
+
+int jointPos[5];
+int jointCenter [5];
+int jointMin[5];
+int jointMax[5];
+
 
 //==================================
 //Motor Control
@@ -84,9 +95,20 @@ void moveServo(byte id, int pos, int spd) {
 }
 
 void centerServo(byte id) {
-  moveServo(id, 2047, 1500);
+  jointPos[id] = jointCenter[id];
+  moveServo(id, jointCenter[id], 1500);
 }
 
+//nudges a joint one JOG_STEP further in the given direction
+//constrained by position max/min
+//-1 = up/left
+//+1 = down/right
+void nudgeJoint(byte id, int direction) {
+  int newPos = jointPos[id] +(direction*JOG_STEP);
+  newPos = constrain(newPos, jointMin[id], jointMax[id]);
+  jointPos[id]=newPos;
+  moveServo(id, newPos, JOG_SPEED);
+}
 
 const char* htmlPage = R"HTMLEND(
 <!DOCTYPE html>
@@ -114,6 +136,9 @@ const char* htmlPage = R"HTMLEND(
       background: #007AFF;
       color: white;
       cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
     .btn:active { background: #005BBB; }
     .stop { background: #FF3B30; width: 220px; }
@@ -127,10 +152,10 @@ const char* htmlPage = R"HTMLEND(
   </style>
 </head>
 <body>
-
+ 
   <h1>Rover Control</h1>
   <div id="status">Ready</div>
-
+ 
   <h2>Drive</h2>
   <p><button class="btn" onclick="cmd('/forward')">Forward</button></p>
   <p>
@@ -139,39 +164,71 @@ const char* htmlPage = R"HTMLEND(
   </p>
   <p><button class="btn" onclick="cmd('/backward')">Backward</button></p>
   <p><button class="btn stop" onclick="cmd('/stop')">STOP</button></p>
-  
+ 
   <hr>
   <h2>Arm</h2>
   <p><button class="btn" onclick="cmd('/arm/center')">Center All</button></p>
-
+ 
   <h2>Shoulder Pitch</h2>
   <p>
-    <button class="btn" onclick="cmd('/servo/shoulder_pitch/up')">Up</button>
+    <button class="btn"
+      onmousedown="startJog('/servo/shoulder_pitch/nudge_up', event)"
+      onmouseup="stopJog()" onmouseleave="stopJog()"
+      ontouchstart="startJog('/servo/shoulder_pitch/nudge_up', event)"
+      ontouchend="stopJog()" ontouchcancel="stopJog()">Up</button>
     <button class="btn" onclick="cmd('/servo/shoulder_pitch/center')">Center</button>
-    <button class="btn" onclick="cmd('/servo/shoulder_pitch/down')">Down</button>
+    <button class="btn"
+      onmousedown="startJog('/servo/shoulder_pitch/nudge_down', event)"
+      onmouseup="stopJog()" onmouseleave="stopJog()"
+      ontouchstart="startJog('/servo/shoulder_pitch/nudge_down', event)"
+      ontouchend="stopJog()" ontouchcancel="stopJog()">Down</button>
   </p>
-
+ 
   <h2>Shoulder Yaw</h2>
   <p>
-    <button class="btn" onclick="cmd('/servo/shoulder_yaw/left')">Left</button>
+    <button class="btn"
+      onmousedown="startJog('/servo/shoulder_yaw/nudge_left', event)"
+      onmouseup="stopJog()" onmouseleave="stopJog()"
+      ontouchstart="startJog('/servo/shoulder_yaw/nudge_left', event)"
+      ontouchend="stopJog()" ontouchcancel="stopJog()">Left</button>
     <button class="btn" onclick="cmd('/servo/shoulder_yaw/center')">Center</button>
-    <button class="btn" onclick="cmd('/servo/shoulder_yaw/right')">Right</button>
+    <button class="btn"
+      onmousedown="startJog('/servo/shoulder_yaw/nudge_right', event)"
+      onmouseup="stopJog()" onmouseleave="stopJog()"
+      ontouchstart="startJog('/servo/shoulder_yaw/nudge_right', event)"
+      ontouchend="stopJog()" ontouchcancel="stopJog()">Right</button>
   </p>
-
+ 
   <h2>Elbow</h2>
   <p>
-    <button class="btn" onclick="cmd('/servo/elbow/up')">Up</button>
+    <button class="btn"
+      onmousedown="startJog('/servo/elbow/nudge_up', event)"
+      onmouseup="stopJog()" onmouseleave="stopJog()"
+      ontouchstart="startJog('/servo/elbow/nudge_up', event)"
+      ontouchend="stopJog()" ontouchcancel="stopJog()">Up</button>
     <button class="btn" onclick="cmd('/servo/elbow/center')">Center</button>
-    <button class="btn" onclick="cmd('/servo/elbow/down')">Down</button>
+    <button class="btn"
+      onmousedown="startJog('/servo/elbow/nudge_down', event)"
+      onmouseup="stopJog()" onmouseleave="stopJog()"
+      ontouchstart="startJog('/servo/elbow/nudge_down', event)"
+      ontouchend="stopJog()" ontouchcancel="stopJog()">Down</button>
   </p>
-
+ 
   <h2>Wrist</h2>
   <p>
-    <button class="btn" onclick="cmd('/servo/wrist/up')">Up</button>
+    <button class="btn"
+      onmousedown="startJog('/servo/wrist/nudge_up', event)"
+      onmouseup="stopJog()" onmouseleave="stopJog()"
+      ontouchstart="startJog('/servo/wrist/nudge_up', event)"
+      ontouchend="stopJog()" ontouchcancel="stopJog()">Up</button>
     <button class="btn" onclick="cmd('/servo/wrist/center')">Center</button>
-    <button class="btn" onclick="cmd('/servo/wrist/down')">Down</button>
+    <button class="btn"
+      onmousedown="startJog('/servo/wrist/nudge_down', event)"
+      onmouseup="stopJog()" onmouseleave="stopJog()"
+      ontouchstart="startJog('/servo/wrist/nudge_down', event)"
+      ontouchend="stopJog()" ontouchcancel="stopJog()">Down</button>
   </p>
-
+ 
   <script>
     function cmd(route) {
       var s = document.getElementById("status");
@@ -190,8 +247,28 @@ const char* htmlPage = R"HTMLEND(
       };
       xhr.send();
     }
+ 
+    // ── Hold-to-jog control ─────────────────────────────────
+    // While a jog button is held, fire cmd(route) repeatedly.
+    // On release, stop firing -- the servo simply stays at its
+    // last commanded position (no separate "stop" needed).
+    let jogInterval = null;
+ 
+    function startJog(route, evt) {
+      if (evt) evt.preventDefault(); // stop touch from also firing a synthetic mousedown
+      if (jogInterval) return;       // already jogging, ignore repeat triggers
+      cmd(route);                    // immediate first move so it feels responsive
+      jogInterval = setInterval(function() { cmd(route); }, 20);
+    }
+ 
+    function stopJog() {
+      if (jogInterval) {
+        clearInterval(jogInterval);
+        jogInterval = null;
+      }
+    }
   </script>
-
+ 
 </body>
 </html>
 )HTMLEND";
@@ -219,26 +296,24 @@ void handleArmCenter() {
 }
 
 // ── Shoulder pitch ─────────────────────────────────────────────
-// 2047 = center (~180°), 1000 = up, 3000 = down
-// (exact up/down limits vary on arm design)
-void handleShoulderPitchUp()     { moveServo(ID_SHOULDER_PITCH, 1000, 1000); server.send(200, "text/plain", "OK"); }
-void handleShoulderPitchCenter() { moveServo(ID_SHOULDER_PITCH, 2047, 1500); server.send(200, "text/plain", "OK"); }
-void handleShoulderPitchDown()   { moveServo(ID_SHOULDER_PITCH, 3000, 1000); server.send(200, "text/plain", "OK"); }
+void handleShoulderPitchNudgeUp()     { nudgeJoint(ID_SHOULDER_PITCH, +1); server.send(200, "text/plain", "OK"); }
+void handleShoulderPitchNudgeDown()   { nudgeJoint(ID_SHOULDER_PITCH, -1); server.send(200, "text/plain", "OK"); }
+void handleShoulderPitchCenter()   { centerServo(ID_SHOULDER_PITCH); server.send(200, "text/plain", "OK"); }
 
 // ── Shoulder yaw ───────────────────────────────────────────────
-void handleShoulderYawLeft()     { moveServo(ID_SHOULDER_YAW, 1000, 1500); server.send(200, "text/plain", "OK"); }
-void handleShoulderYawCenter()   { moveServo(ID_SHOULDER_YAW, 2047, 1500); server.send(200, "text/plain", "OK"); }
-void handleShoulderYawRight()    { moveServo(ID_SHOULDER_YAW, 3000, 1500); server.send(200, "text/plain", "OK"); }
+void handleShoulderYawNudgeLeft()     { nudgeJoint(ID_SHOULDER_YAW, +1); server.send(200, "text/plain", "OK"); }
+void handleShoulderYawCenter()   { centerServo(ID_SHOULDER_YAW); server.send(200, "text/plain", "OK"); }
+void handleShoulderYawNudgeRight()    { nudgeJoint(ID_SHOULDER_YAW, -1); server.send(200, "text/plain", "OK"); }
 
 // ── Elbow ──────────────────────────────────────────────────────
-void handleElbowUp()     { moveServo(ID_ELBOW, 1000, 1500); server.send(200, "text/plain", "OK"); }
-void handleElbowCenter() { moveServo(ID_ELBOW, 2047, 1500); server.send(200, "text/plain", "OK"); }
-void handleElbowDown()   { moveServo(ID_ELBOW, 3000, 1500); server.send(200, "text/plain", "OK"); }
+void handleElbowNudgeUp()     { nudgeJoint(ID_ELBOW, +1); server.send(200, "text/plain", "OK"); }
+void handleElbowCenter() { centerServo(ID_ELBOW); server.send(200, "text/plain", "OK"); }
+void handleElbowNudgeDown()   { nudgeJoint(ID_ELBOW, -1); server.send(200, "text/plain", "OK"); }
 
 // ── Wrist ──────────────────────────────────────────────────────
-void handleWristUp()     { moveServo(ID_WRIST, 1000, 1500); server.send(200, "text/plain", "OK"); }
-void handleWristCenter() { moveServo(ID_WRIST, 2047, 1500); server.send(200, "text/plain", "OK"); }
-void handleWristDown()   { moveServo(ID_WRIST, 3000, 1500); server.send(200, "text/plain", "OK"); }
+void handleWristNudgeUp()     { nudgeJoint(ID_WRIST, +1); server.send(200, "text/plain", "OK"); }
+void handleWristCenter() { centerServo(ID_WRIST); server.send(200, "text/plain", "OK"); }
+void handleWristNudgeDown()   { nudgeJoint(ID_WRIST, -1); server.send(200, "text/plain", "OK"); }
 
 
 //==================================
@@ -249,6 +324,8 @@ void handleWristDown()   { moveServo(ID_WRIST, 3000, 1500); server.send(200, "te
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
+    Serial.println("Build: " __DATE__ " " __TIME__);
+
 
   pinMode(AIN1, OUTPUT);
   pinMode(AIN2, OUTPUT);
@@ -261,6 +338,26 @@ void setup() {
   servos.pSerial = &Serial1;
   delay(100);
 
+//Servo Rotation limits and centers
+jointCenter[ID_SHOULDER_PITCH] = 2688;
+jointMin[ID_SHOULDER_PITCH] = 2200;
+jointMax[ID_SHOULDER_PITCH] = 3366;
+jointPos[ID_SHOULDER_PITCH] = jointCenter[ID_SHOULDER_PITCH];
+
+jointCenter[ID_SHOULDER_YAW] = 2815;
+jointMin[ID_SHOULDER_YAW] = 0; //consider removing min/max for yaw
+jointMax[ID_SHOULDER_YAW] = 4095;
+jointPos[ID_SHOULDER_YAW] = jointCenter[ID_SHOULDER_YAW];
+
+jointCenter[ID_ELBOW] = 1693;
+jointMin[ID_ELBOW] = 880;
+jointMax[ID_ELBOW] = 3680;
+jointPos[ID_ELBOW] = jointCenter[ID_ELBOW];
+
+jointCenter[ID_WRIST] = 2048;
+jointMin[ID_WRIST] = 0;
+jointMax[ID_WRIST] = 4095;
+jointPos[ID_WRIST] = jointCenter[ID_WRIST];
 
   WiFi.softAP(apSSID, apPassword); //turn ESP into its own WiFi
   IPAddress ip = WiFi.softAPIP();
@@ -278,18 +375,18 @@ void setup() {
   
   // Arm routes
   server.on("/arm/center",              handleArmCenter);
-  server.on("/servo/shoulder_pitch/up",     handleShoulderPitchUp);
+  server.on("/servo/shoulder_pitch/nudge_up",     handleShoulderPitchNudgeUp);
   server.on("/servo/shoulder_pitch/center", handleShoulderPitchCenter);
-  server.on("/servo/shoulder_pitch/down",   handleShoulderPitchDown);
-  server.on("/servo/shoulder_yaw/left",     handleShoulderYawLeft);
+  server.on("/servo/shoulder_pitch/nudge_down",   handleShoulderPitchNudgeDown);
+  server.on("/servo/shoulder_yaw/nudge_left",     handleShoulderYawNudgeLeft);
   server.on("/servo/shoulder_yaw/center",   handleShoulderYawCenter);
-  server.on("/servo/shoulder_yaw/right",    handleShoulderYawRight);
-  server.on("/servo/elbow/up",     handleElbowUp);
+  server.on("/servo/shoulder_yaw/nudge_right",    handleShoulderYawNudgeRight);
+  server.on("/servo/elbow/nudge_up",     handleElbowNudgeUp);
   server.on("/servo/elbow/center", handleElbowCenter);
-  server.on("/servo/elbow/down",   handleElbowDown);
-  server.on("/servo/wrist/up",     handleWristUp);
+  server.on("/servo/elbow/nudge_down",   handleElbowNudgeDown);
+  server.on("/servo/wrist/nudge_up",     handleWristNudgeUp);
   server.on("/servo/wrist/center", handleWristCenter);
-  server.on("/servo/wrist/down",   handleWristDown);
+  server.on("/servo/wrist/nudge_down",   handleWristNudgeDown);
 
   server.begin();
   Serial.println("Server started - navigate to IP Address");
