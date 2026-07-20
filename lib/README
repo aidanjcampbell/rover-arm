@@ -1,46 +1,156 @@
+# RoverArm — 4-DOF Rover-Mounted Robotic Arm
 
-This directory is intended for project specific (private) libraries.
-PlatformIO will compile them to static libraries and link into the executable file.
+![Arm lifting 800g at full extension](media/hero-800g.gif)
 
-The source code of each library should be placed in a separate directory
-("lib/your_library_name/[Code]").
+**A 3D-printed 4-DOF robotic arm lifting 800 g at 30 cm reach, 60% over its 0.5 kg design target. The rover is driven by 2x 12V DC Motors while the arm is powered by 4x Feetech servos, all controlled wirelessly by the ESP32. Designed, built, and tested from scratch.**
 
-For example, see the structure of the following example libraries `Foo` and `Bar`:
+---
 
-|--lib
-|  |
-|  |--Bar
-|  |  |--docs
-|  |  |--examples
-|  |  |--src
-|  |     |- Bar.c
-|  |     |- Bar.h
-|  |  |- library.json (optional. for custom build options, etc) https://docs.platformio.org/page/librarymanager/config.html
-|  |
-|  |--Foo
-|  |  |- Foo.c
-|  |  |- Foo.h
-|  |
-|  |- README --> THIS FILE
-|
-|- platformio.ini
-|--src
-   |- main.c
+## Contents
+- [Demo](#demo)
+- [Overview](#overview)
+- [Specifications](#specifications)
+- [Key Engineering Decisions](#key-engineering-decisions)
+- [Requirements & Verification](#requirements--verification)
+- [Build Gallery](#build-gallery)
+- [Bill of Materials](#bill-of-materials)
+- [CAD & Firmware](#cad--firmware)
+- [Development Timeline](#development-timeline)
 
-Example contents of `src/main.c` using Foo and Bar:
+---
+
+## Demo
+
+| | |
+|---|---|
+| ![Payload lift](media/lift-800g.gif) | **Payload test** — 800 g held at 30 cm extension |
+| ![Range of motion](media/joint-sweep.gif) | **Range of motion** — all 4 DOF |
+| ![Web control](media/web-ui.gif) | **Control** — hold-to-jog from phone over onboard WiFi |
+
+▶ [Full 3-minute design walkthrough](https://youtube.com/your-link)
+
+---
+
+## Overview
+
+I set out to design a rover-mounted manipulator that lifts 0.5 kg at 30 cm extension, with every structural component printable on a consumer FDM machine and a total cost under $300. The arm has a 2-axis shoulder (pitch + yaw), single-axis elbow and wrist, and a gripper, all driven by Feetech serial bus servos on a single half-duplex TTL line.
+
+All structural design, torque budgeting, actuator selection, firmware, and the control interface are my own work. The arm currently holds 800 g — 60% above its design target — with the working payload ceiling now limited by platform stability rather than the actuator, which is the focus of ongoing work.
+
+---
+
+## Specifications
+
+| Parameter | Value |
+|---|---|
+| Degrees of freedom | 5 + gripper |
+| Design payload | 0.5 kg @ 30 cm extension |
+| Demonstrated payload | 0.8 kg @ 30 cm *(platform-limited, not actuator-limited)* |
+| Reach | 30 cm |
+| Shoulder | 2-axis (pitch + yaw) |
+| Actuators | ST3250 (50 kg·cm) · 3× ST3215 (30 kg·cm) · SCS0009 gripper |
+| Controller | ESP32-WROOM-32 (Waveshare General Driver for Robots) |
+| Control | Onboard WiFi AP + web UI, hold-to-jog |
+| Power | 3S LiPo (11.1 V nominal) |
+| Structure | PETG, Warren-truss forearm link |
+
+---
+
+## Key Engineering Decisions
+
+### Counterbalance spring at the shoulder
+
+At full extension the shoulder-pitch joint carries the largest gravity load in the arm. Sizing an actuator for that peak alone would have forced an oversized, expensive servo. Instead I added a counterbalance spring positioned so its torque contribution scales with cos(θ) — matching the gravity-torque profile across the joint's range, so it offsets the load at every angle rather than just one.
+
+Result *(illustrative)*: peak required stall torque dropped from ~52 to ~34 kg·cm, letting the ST3250 run at roughly 65% of stall with a 2.5× safety factor instead of running at its limit.
+
+### Warren-truss forearm link
+
+The elbow-to-wrist link needed high bending stiffness at low mass and low print time. Rather than a solid printed beam, I used a Warren-truss geometry, which carries load through members in tension/compression rather than bending. The Fusion 360 model is parametric — member angles and lengths are driven by `atan()`/`sqrt()` expressions of the link length — so the truss regenerates correctly whenever the overall geometry changes, without manual rework.
+
+### Base stability under payload (in progress)
+
+Passing the payload test exposed the next constraint: at full extension the combined center of gravity shifts forward of the front wheel contact line and the rover tips (quasi-static, at the extension limit). Because this is a *mobile* platform, a permanent counterweight is a poor fix — dead mass burdens the drivetrain every second it drives — so the design solution [is being selected from wheelbase / low-CG / deployable-stabilizer options]. A rear counterweight is used separately as a bench fixture to decouple actuator-capability testing from platform stability, letting the arm's true payload ceiling be measured independently of the tipping limit.
+
+### Sourcing: the 12 V variant trap
+
+The ST3215 ships in visually identical 7.4 V (19.5 kg·cm) and 12 V (30 kg·cm) variants, and most listings don't distinguish them. My torque budget required the 12 V variant; I verified the spec against the datasheet and sourced from DFRobot rather than trusting a listing title. The linked BOM below points to the correct variant.
+
+---
+
+## Requirements & Verification
+
+| # | Requirement | Design response | Verification |
+|---|---|---|---|
+| R1 | Lift 0.5 kg @ 30 cm | ST3250 shoulder + counterbalance spring; 2.5× SF on stall | ✅ **Passed** — held 0.5 kg at full extension; demonstrated to 0.8 kg |
+| R2 | All joints position-controlled | STS serial bus, per-joint calibration arrays | ✅ Repeatability ±X° over N cycles *(pending)* |
+| R3 | Untethered operation | Onboard WiFi AP + 3S LiPo | ⏳ Runtime test pending |
+| R4 | Consumer-FDM printable | All parts fit P1S bed; no supports on load paths | ✅ Verified — print inventory in `/cad` |
+
+*Max payload ceiling pending resolution of base stability (see above).*
+
+---
+
+## Build Gallery
+
+<table>
+  <tr>
+    <td><img src="media/shoulder-cad.png" width="400"/></td>
+    <td><img src="media/shoulder-real.jpg" width="400"/></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Shoulder assembly — CAD</em></td>
+    <td align="center"><em>As built, with counterbalance spring</em></td>
+  </tr>
+</table>
+
+*[+ 4–6 more: forearm truss, gripper, full assembly with object for scale, 1–2 annotated.]*
+
+---
+
+## Bill of Materials
+
+*Key components below. [Full BOM — all hardware, quantities, costs (CSV)](docs/full-bom.csv) · [XLSX](docs/full-bom.xlsx)*
+
+| Component | Qty | Spec | Source | Price |
+|---|---|---|---|---|
+| Feetech ST3250 | 1 | 50 kg·cm, 12 V | [Babsco Supply](#) | $77.99 |
+| Feetech ST3215 **(12 V)** | 3 | 30 kg·cm | [DFRobot](#) | $19.90 ea |
+| Feetech SCS0009 (gripper) | 1 | — | [link](#) | $X |
+| Waveshare General Driver for Robots | 1 | ESP32 + TB6612FNG | [link](#) | $X |
+| Ovonic 3S LiPo | 1 | 2200 mAh 35C XT60 | [link](#) | $X |
+| Hardened dowel pins (h6) | — | joint shafts | [link](#) | $X |
+
+*Last verified: [month year]. Total: ~$X.*
+
+---
+
+## CAD & Firmware
+
+**CAD** — [STEP files](cad/step/) (any CAD tool) · [STL files](cad/stl/) (print-ready; GitHub renders these in an interactive 3D viewer) · [print settings](docs/print-settings.md)
+
+**Firmware** — PlatformIO (pioarduino ESP32 fork) + SCServo library. WiFi AP web server with hold-to-jog control, per-joint calibration arrays, build-timestamp version verification at boot.
+
+```bash
+pio run -t upload          # build & flash
+# connect to "RoverArm" AP → http://192.168.4.1
 ```
-#include <Foo.h>
-#include <Bar.h>
 
-int main (void)
-{
-  ...
-}
+Source and structure in [`/src`](src/).
 
-```
+---
 
-The PlatformIO Library Dependency Finder will find automatically dependent
-libraries by scanning project source files.
+## Development Timeline
 
-More information about PlatformIO Library Dependency Finder
-- https://docs.platformio.org/page/librarymanager/ldf.html
+- **Actuator sizing** — Torque budget + safety-factor decomposition → ST3250 at shoulder pitch.
+- **Sourcing** — Identified ST3215 12 V/7.4 V variant trap; sourced correct 30 kg·cm units.
+- **Servo bus bring-up** — Isolated a driver-board transceiver fault ([case study](docs/servo-bus.md)); first joint motion on replacement board.
+- **Structure** — Warren-truss forearm; parametric validation in Fusion.
+- **Payload test passed** — 0.5 kg at 30 cm (R1); demonstrated to 0.8 kg.
+- **Base stability** — Diagnosed forward-CG tipping; fix in progress.
+
+---
+
+## About
+
+Mechanical engineering student, Georgia Tech. · [LinkedIn](#) · [email](#)
