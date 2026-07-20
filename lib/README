@@ -1,4 +1,4 @@
-# RoverArm — 4-DOF Rover-Mounted Robotic Arm
+# Rover-Arm — 4-DOF Rover-Mounted Robotic Arm
 
 ![Arm lifting 800g at full extension](media/hero-800g.gif)
 
@@ -33,9 +33,11 @@
 
 ## Overview
 
-I set out to design a rover-mounted manipulator that lifts 0.5 kg at 30 cm extension, with every structural component printable on a consumer FDM machine and a total cost under $300. The arm has a 2-axis shoulder (pitch + yaw), single-axis elbow and wrist, and a gripper, all driven by Feetech serial bus servos on a single half-duplex TTL line.
+I set out to design a rover-mounted manipulator that lifts 0.5 kg at 30 cm extension, with every structural component printable on a consumer FDM machine and a total cost under $300. The arm has a 2-axis shoulder (pitch + yaw), single-axis elbow and wrist, and a fork-style end effector, all driven by Feetech serial bus servos on a single half-duplex TTL line.
 
-All structural design, torque budgeting, actuator selection, firmware, and the control interface are my own work. The arm currently holds 800 g — 60% above its design target — with the working payload ceiling now limited by platform stability rather than the actuator, which is the focus of ongoing work.
+All structural design, torque budgeting, and component selection are my own work. Firmware was developed with AI assistance (Claude) to move quickly through boilerplate code and debugging, keeping my focus on the mechanical design and system integration. I directed the architecture, integrated it with the hardware, and validated all behavior on the physical build.
+
+ The arm currently holds 800 g — 60% above its design target — with the working payload ceiling now limited by platform stability rather than the actuator, which is the focus of ongoing work.
 
 ---
 
@@ -43,17 +45,14 @@ All structural design, torque budgeting, actuator selection, firmware, and the c
 
 | Parameter | Value |
 |---|---|
-| Degrees of freedom | 5 + gripper |
 | Design payload | 0.5 kg @ 30 cm extension |
 | Demonstrated payload | 0.8 kg @ 30 cm *(platform-limited, not actuator-limited)* |
 | Reach | 30 cm |
-| Shoulder | 2-axis (pitch + yaw) |
 | Actuators | ST3250 (50 kg·cm) · 3× ST3215 (30 kg·cm) · SCS0009 gripper |
+|Drive Motors| 2x 12V DC 100RPM Motors
 | Controller | ESP32-WROOM-32 (Waveshare General Driver for Robots) |
 | Control | Onboard WiFi AP + web UI, hold-to-jog |
 | Power | 3S LiPo (11.1 V nominal) |
-| Structure | PETG, Warren-truss forearm link |
-
 ---
 
 ## Key Engineering Decisions
@@ -82,10 +81,10 @@ The ST3215 ships in visually identical 7.4 V (19.5 kg·cm) and 12 V (30 kg·cm) 
 
 | # | Requirement | Design response | Verification |
 |---|---|---|---|
-| R1 | Lift 0.5 kg @ 30 cm | ST3250 shoulder + counterbalance spring; 2.5× SF on stall | ✅ **Passed** — held 0.5 kg at full extension; demonstrated to 0.8 kg |
-| R2 | All joints position-controlled | STS serial bus, per-joint calibration arrays | ✅ Repeatability ±X° over N cycles *(pending)* |
-| R3 | Untethered operation | Onboard WiFi AP + 3S LiPo | ⏳ Runtime test pending |
-| R4 | Consumer-FDM printable | All parts fit P1S bed; no supports on load paths | ✅ Verified — print inventory in `/cad` |
+| R1 | Lift 0.5 kg @ 30 cm | ST3250 shoulder + optimized truss designs | ✅ **Passed** — held 0.5 kg at full extension; demonstrated to 0.8 kg |
+| R2 | Mobile rover base capable of supporting arm | Differential drive DC motors + custom ball bearing + counterweight |  ** Repeatability ±X° over N cycles *(pending)* |
+| R3 | Untethered operation | Onboard WiFi AP + 3S LiPo | ** Runtime test pending |
+| R4 | Consumer-FDM printable | All parts fit P1S bed | ✅ Verified — print inventory in `/cad` |
 
 *Max payload ceiling pending resolution of base stability (see above).*
 
@@ -142,10 +141,11 @@ Source and structure in [`/src`](src/).
 
 ## Development Timeline
 
-- **Actuator sizing** — Torque budget + safety-factor decomposition → ST3250 at shoulder pitch.
-- **Sourcing** — Identified ST3215 12 V/7.4 V variant trap; sourced correct 30 kg·cm units.
+- **Getting Started** - Prototyped rover base with intention to use Arduino Uno R3 & HC-05 Bluetooth module for wireless control
+- **Architecure Swap** - Swapped Arduino for ESP32 General Robotics Driver after realizing pin limitations
+- **Actuator sizing** - Torque & inertia calculations + safety-factor decomposition → ST3250 at shoulder pitch.
 - **Servo bus bring-up** — Isolated a driver-board transceiver fault ([case study](docs/servo-bus.md)); first joint motion on replacement board.
-- **Structure** — Warren-truss forearm; parametric validation in Fusion.
+- **Structure** — Designed/printed lightweight Warren-truss forearm to optimize strength within weight constraints
 - **Payload test passed** — 0.5 kg at 30 cm (R1); demonstrated to 0.8 kg.
 - **Base stability** — Diagnosed forward-CG tipping; fix in progress.
 
