@@ -33,7 +33,7 @@
 
 ## Overview
 
-I set out to design a rover-mounted manipulator that lifts 0.5 kg at 30 cm extension, with every structural component printable on a consumer FDM machine and a total cost under $300. The arm has a 2-axis shoulder (pitch + yaw), single-axis elbow and wrist, and a fork-style end effector, all driven by Feetech serial bus servos on a single half-duplex TTL line.
+I set out to design a mobile rover-mounted manipulator that lifts 0.5 kg at 30 cm extension, with every structural component printable on a consumer FDM machine and a total cost under $300. The arm has a 2-axis shoulder (pitch + yaw), single-axis elbow and wrist, and a fork-style end effector, all driven by Feetech serial bus servos on a single half-duplex TTL line.
 
 All structural design, torque budgeting, and component selection are my own work. Firmware was developed with AI assistance (Claude) to move quickly through boilerplate code and debugging, keeping my focus on the mechanical design and system integration. I directed the architecture, integrated it with the hardware, and validated all behavior on the physical build.
 
@@ -57,23 +57,21 @@ All structural design, torque budgeting, and component selection are my own work
 
 ## Key Engineering Decisions
 
-### Counterbalance spring at the shoulder
+### Switching Control Architecture
 
-At full extension the shoulder-pitch joint carries the largest gravity load in the arm. Sizing an actuator for that peak alone would have forced an oversized, expensive servo. Instead I added a counterbalance spring positioned so its torque contribution scales with cos(θ) — matching the gravity-torque profile across the joint's range, so it offsets the load at every angle rather than just one.
+Intending to build the entire rover off of the Arduino Uno R3 as my command module, I developed the entire base of the rover using this architecture until I realized that its limited pin numbers were going to cause problems when adding the servo bus. I then made the decision to start from scratch with the ESP32 General Robotics Driver.
 
-Result *(illustrative)*: peak required stall torque dropped from ~52 to ~34 kg·cm, letting the ST3250 run at roughly 65% of stall with a 2.5× safety factor instead of running at its limit.
+Result: Reduced total wires inside rover body by 47%, integrated TB1266FNG motor driver and wireless control into board, and simplifies wiring debugging and maintenace.
 
-### Warren-truss forearm link
+### Warren-Truss Forearm Link
 
 The elbow-to-wrist link needed high bending stiffness at low mass and low print time. Rather than a solid printed beam, I used a Warren-truss geometry, which carries load through members in tension/compression rather than bending. The Fusion 360 model is parametric — member angles and lengths are driven by `atan()`/`sqrt()` expressions of the link length — so the truss regenerates correctly whenever the overall geometry changes, without manual rework.
 
-### Base stability under payload (in progress)
+### Base Stability Under Payload (in progress)
 
-Passing the payload test exposed the next constraint: at full extension the combined center of gravity shifts forward of the front wheel contact line and the rover tips (quasi-static, at the extension limit). Because this is a *mobile* platform, a permanent counterweight is a poor fix — dead mass burdens the drivetrain every second it drives — so the design solution [is being selected from wheelbase / low-CG / deployable-stabilizer options]. A rear counterweight is used separately as a bench fixture to decouple actuator-capability testing from platform stability, letting the arm's true payload ceiling be measured independently of the tipping limit.
+Passing the payload test exposed the next constraint: at full extension the combined center of gravity shifts forward of the front wheel contact line and the rover tips. Because this is a *mobile* platform, any counterweight added needs to be modular and fixed opposite the arm on the rotating base to counter the torque applied to the arm in any position. ***Calculate counterweight torque and give numbers**
 
-### Sourcing: the 12 V variant trap
-
-The ST3215 ships in visually identical 7.4 V (19.5 kg·cm) and 12 V (30 kg·cm) variants, and most listings don't distinguish them. My torque budget required the 12 V variant; I verified the spec against the datasheet and sourced from DFRobot rather than trusting a listing title. The linked BOM below points to the correct variant.
+Result:
 
 ---
 
@@ -103,7 +101,7 @@ The ST3215 ships in visually identical 7.4 V (19.5 kg·cm) and 12 V (30 kg·cm) 
   </tr>
 </table>
 
-*[+ 4–6 more: forearm truss, gripper, full assembly with object for scale, 1–2 annotated.]*
+*[+ 4–6 more: forearm truss, fork end-effector, full assembly with object for scale, 1–2 annotated.]*
 
 ---
 
