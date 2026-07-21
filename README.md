@@ -22,7 +22,7 @@
 
 | | |
 |---|---|
-| ![Payload lift](media/lift-800g.gif) | **Payload test** — 800 g held at 30 cm extension |
+| ![Payload lift](media/800g_demo.gif) | **Payload test** — 800 g held at 30 cm extension |
 | ![Range of motion](media/joint-sweep.gif) | **Range of motion** — all 4 DOF |
 | ![Web control](media/web-ui.gif) | **Control** — hold-to-jog from phone over onboard WiFi |
 
@@ -36,7 +36,7 @@ I set out to design a mobile rover-mounted manipulator that lifts 0.5 kg at 30 c
 
 All structural design, torque budgeting, and component selection are my own work. Firmware was developed with AI assistance (Claude) to move quickly through boilerplate code and debugging, keeping my focus on the mechanical design and system integration. I directed the architecture, integrated it with the hardware, and validated all behavior on the physical build.
 
- The arm currently holds 800 g — 60% above its design target — with the working payload ceiling now limited by platform stability rather than the actuator, which is the focus of ongoing work.
+ The arm currently lifts and holds 800g (60% above its design target) with the working payload ceiling now limited by platform stability rather than the actuator, which is the focus of ongoing work.
 
 ---
 
@@ -47,7 +47,7 @@ All structural design, torque budgeting, and component selection are my own work
 | Design payload | 0.5 kg @ 30 cm extension |
 | Demonstrated payload | 0.8 kg @ 30 cm *(platform-limited, not actuator-limited)* |
 | Reach | 30 cm |
-| Actuators | ST3250 (50 kg·cm) · 3× ST3215 (30 kg·cm) · SCS0009 gripper |
+| Actuators | ST3250 (50 kg·cm) · 3× ST3215 (30 kg·cm)|
 |Drive Motors| 2x 12V DC 100RPM Motors
 | Controller | ESP32-WROOM-32 (Waveshare General Driver for Robots) |
 | Control | Onboard WiFi AP + web UI, hold-to-jog |
@@ -60,7 +60,7 @@ All structural design, torque budgeting, and component selection are my own work
 
 Intending to build the entire rover off of the Arduino Uno R3 as my command module, I developed the entire base of the rover using this architecture until I realized that its limited pin numbers were going to cause problems when adding the servo bus. I then made the decision to start from scratch with the ESP32 General Robotics Driver.
 
-Result: Reduced total wires inside rover body by 47%, integrated TB1266FNG motor driver and wireless control into board, and simplifies wiring debugging and maintenace.
+Result: The General Robotics Driver integrated the TB1266FNG motor driver, wireless control, and the servo control all into one chip, giving us the numer of pins ne needed while simplifying electronics with a 47% reduction in internal wires (34 before, 18 after).
 
 ### Warren-Truss Forearm Link
 
