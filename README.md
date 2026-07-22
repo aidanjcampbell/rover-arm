@@ -60,17 +60,20 @@ All structural design, torque budgeting, and component selection are my own work
 
 Intending to build the entire rover off of the Arduino Uno R3 as my command module, I developed the entire base of the rover using this architecture until I realized that its limited pin numbers were going to cause problems when adding the servo bus. I then made the decision to start from scratch with the ESP32 General Robotics Driver.
 
-Result: The General Robotics Driver integrated the TB1266FNG motor driver, wireless control, and the servo control all into one chip, giving us the numer of pins ne needed while simplifying electronics with a 47% reduction in internal wires (34 before, 18 after).
+Result: The General Robotics Driver integrated the TB1266FNG motor driver, wireless control, and the servo control all into one chip, giving us the number of pins we needed while simplifying electronics with a 47% reduction in internal wires (34 before, 18 after).
+
+### Servo Selection & Safety Factor
+
 
 ### Warren-Truss Forearm Link
 
-The elbow-to-wrist link needed high bending stiffness at low mass and low print time. Rather than a solid printed beam, I used a Warren-truss geometry, which carries load through members in tension/compression rather than bending. The Fusion 360 model is parametric — member angles and lengths are driven by `atan()`/`sqrt()` expressions of the link length — so the truss regenerates correctly whenever the overall geometry changes, without manual rework.
+The elbow-to-wrist link needed high bending stiffness at a very low mass to allow the actuators to lift the target payload. Rather than a solid printed beam, I used a Warren-truss geometry, which carries load through members in tension/compression rather than bending. The Fusion 360 model is parametric — member angles and lengths are driven by expressions of the link length — so the truss regenerates correctly whenever the overall geometry changes, without manual rework.
 
 ### Base Stability Under Payload (in progress)
 
-Passing the payload test exposed the next constraint: at full extension the combined center of gravity shifts forward of the front wheel contact line and the rover tips. Because this is a *mobile* platform, any counterweight added needs to be modular and fixed opposite the arm on the rotating base to counter the torque applied to the arm in any position. ***Calculate counterweight torque and give numbers**
+Passing the payload test exposed the next constraint: at full extension the combined center of gravity shifts forward of the front wheel contact line and the rover tips. Because this is a *mobile* platform, any counterweight added needs to be modular and fixed opposite the arm on the rotating base to counter the torque applied to the arm in any position. 
 
-Result:
+Result: The counterweight is estimated to provide 81.5 kg*cm of torque opposite the arm, allowing the arm to lift up to a theoretical maximum of 2.7kg if structures and actuators allowed.
 
 ---
 
@@ -123,7 +126,7 @@ Result:
 
 ## CAD & Firmware
 
-**CAD** — [STEP files](cad/step/) (any CAD tool) · [STL files](cad/stl/) (print-ready; GitHub renders these in an interactive 3D viewer) · [print settings](docs/print-settings.md)
+**CAD** — [STEP files](cad/step/) (any CAD tool) · [STL files](cad/stl/) (print-ready; renders these in an interactive 3D viewer)
 
 **Firmware** — PlatformIO (pioarduino ESP32 fork) + SCServo library. WiFi AP web server with hold-to-jog control, per-joint calibration arrays, build-timestamp version verification at boot.
 
@@ -141,7 +144,7 @@ Source and structure in [`/src`](src/).
 - **Getting Started** - Prototyped rover base with intention to use Arduino Uno R3 & HC-05 Bluetooth module for wireless control
 - **Architecure Swap** - Swapped Arduino for ESP32 General Robotics Driver after realizing pin limitations
 - **Actuator sizing** - Torque & inertia calculations + safety-factor decomposition → ST3250 at shoulder pitch.
-- **Servo bus bring-up** — Isolated a driver-board transceiver fault ([case study](docs/servo-bus.md)); first joint motion on replacement board.
+- **Servo bus bring-up** — Isolated a driver-board transceiver fault ([case study](docs/servo-issue.md)); first joint motion on replacement board.
 - **Structure** — Designed/printed lightweight Warren-truss forearm to optimize strength within weight constraints
 - **Payload test passed** — 0.5 kg at 30 cm (R1); demonstrated to 0.8 kg.
 - **Base stability** — Diagnosed forward-CG tipping; fix in progress.
