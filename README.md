@@ -22,7 +22,7 @@
 
 | | |
 |---|---|
-| ![Payload lift](media/800g_demo.gif) | **Payload test** — 800 g held at 30 cm extension |
+| ![Payload lift](media/900g-Test_Success_2.gif) | **Payload test** — 900 g held at 30 cm extension |
 | ![Range of motion](media/joint-sweep.gif) | **Range of motion** — all 4 DOF |
 | ![Web control](media/web-ui.gif) | **Control** — hold-to-jog from phone over onboard WiFi |
 
@@ -45,7 +45,7 @@ All structural design, torque budgeting, and component selection are my own work
 | Parameter | Value |
 |---|---|
 | Design payload | 0.5 kg @ 30 cm extension |
-| Demonstrated payload | 0.8 kg @ 30 cm *(platform-limited, not actuator-limited)* |
+| Demonstrated payload | 0.9 kg @ 30 cm *(platform-limited, not actuator-limited)* |
 | Reach | 30 cm |
 | Actuators | ST3250 (50 kg·cm) · 3× ST3215 (30 kg·cm)|
 |Drive Motors| 2x 12V DC 100RPM Motors
@@ -67,7 +67,7 @@ Result: The General Robotics Driver integrated the TB1266FNG motor driver, wirel
 
 ### Warren-Truss Forearm Link
 
-The elbow-to-wrist link needed high bending stiffness at a very low mass to allow the actuators to lift the target payload. Rather than a solid printed beam, I used a Warren-truss geometry, which carries load through members in tension/compression rather than bending. The Fusion 360 model is parametric — member angles and lengths are driven by expressions of the link length — so the truss regenerates correctly whenever the overall geometry changes, without manual rework.
+The elbow-to-wrist link needed high bending stiffness at a very low mass to allow the actuators to lift the target payload. Rather than a solid printed beam, I used a Warren-truss geometry, which carries load through members in tension/compression rather than bending. The Fusion 360 model is parametric with member angles and lengths driven by expressions of the link length, so the truss regenerates correctly whenever the overall geometry changes without manual rework.
 
 ### Base Stability Under Payload (in progress)
 
@@ -115,11 +115,8 @@ Result: The counterweight is estimated to provide 81.5 kg*cm of torque opposite 
 |---|---|---|---|---|
 | Feetech ST3250 | 1 | 50 kg·cm, 12 V | [Babsco Supply](#) | $77.99 |
 | Feetech ST3215 **(12 V)** | 3 | 30 kg·cm | [DFRobot](#) | $19.90 ea |
-| Feetech SCS0009 (gripper) | 1 | — | [link](#) | $X |
-| Waveshare General Driver for Robots | 1 | ESP32 + TB6612FNG | [link](#) | $X |
-| Ovonic 3S LiPo | 1 | 2200 mAh 35C XT60 | [link](#) | $X |
-| Hardened dowel pins (h6) | — | joint shafts | [link](#) | $X |
-
+| Waveshare General Driver for Robots | 1 | ESP32 + TB6612FNG + Servo Bus Control| [link](#) | $X |
+| Ovonic 3S LiPo | 1 | 11.1V 2200 mAh XT60 | [link](#) | $X |
 *Last verified: [month year]. Total: ~$X.*
 
 ---
@@ -145,9 +142,10 @@ Source and structure in [`/src`](src/).
 - **Architecure Swap** - Swapped Arduino for ESP32 General Robotics Driver after realizing pin limitations
 - **Actuator sizing** - Torque & inertia calculations + safety-factor decomposition → ST3250 at shoulder pitch.
 - **Servo bus bring-up** — Isolated a driver-board transceiver fault ([case study](docs/servo-issue.md)); first joint motion on replacement board.
-- **Structure** — Designed/printed lightweight Warren-truss forearm to optimize strength within weight constraints
+- **Elbow-Wrist Linkage** — Designed/printed lightweight Warren-truss forearm to optimize strength within weight constraints
 - **Payload test passed** — 0.5 kg at 30 cm (R1); demonstrated to 0.8 kg.
-- **Base stability** — Diagnosed forward-CG tipping; fix in progress.
+- **Base stability** — Diagnosed forward tipping resulting from heavy loads lifted by the arm and designed and printed a modular counterweight structure that could be variably loaded depending on arm load
+- **Shoulder Joint Failure** - When lifting 1000g, the shoulder-elbow linkage deformed where it mounted to the shoulder servo and caused the arm to fail. Resolved by increasing the wall thickness and infill percent on the second iteration print
 
 ---
 
