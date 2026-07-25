@@ -23,7 +23,7 @@
 | | |
 |---|---|
 | ![Payload lift](media/900g-Test_Success_2.gif) | **Payload test** — 900 g held at 30 cm extension |
-| ![Range of motion](media/joint-sweep.gif) | **Range of motion** — all 4 DOF |
+| ![Range of motion](media/DOF_demo_2.gif) | **Range of motion** — all 4 DOF |
 | ![Web control](media/web-ui.gif) | **Control** — hold-to-jog from phone over onboard WiFi |
 
 ▶ [Full 3-minute design walkthrough](https://youtube.com/your-link)
