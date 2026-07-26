@@ -21,19 +21,35 @@ Lift **0.5 kg** at **30 cm** maximum extension.
 Configuration: 2-axis shoulder (pitch + yaw), single-axis elbow, single-axis wrist, gripper.
 
 ## Method
-
+Total Torque:
+```math
+\tau_{\text{tot}} = \tau_s + \tau_I
+```
 Static torque about a joint:
-
 ```math
 \tau = m \cdot L \cdot \cos\theta
 ```
 
 Torque is expressed in **kgf·cm**. Because kilogram-force already carries gravitational acceleration, using mass in kg and length in cm yields torque directly — there is no separate $g = 9.81$ term. Worst case is $\theta = 0$ (arm horizontal), where the moment arm is longest.
 
-For a multi-joint system, a joint carries the payload **and** every link outboard of it, each at its own moment arm:
+For a multi-joint system, a joint carries the payload **and** every link and servo outboard of it, each at its own moment arm:
 
 ```math
-\tau_{\text{joint}} = \sum_i m_i \cdot L_i \cdot \cos\theta
+\tau_{\text{joint}} = \sum m \cdot L \cdot \cos\theta
+```
+
+Inertial Torque about a joint:
+
+```math
+\tau_I = I \cdot \alpha
+```
+Where
+```math
+I = \sum mr^2
+```
+and
+```math
+\alpha = \frac{4\Delta \theta}{T^2}
 ```
 
 ![Free-body diagram — shoulder at θ = 0](img/fbd-shoulder.png)
@@ -41,9 +57,9 @@ For a multi-joint system, a joint carries the payload **and** every link outboar
 
 ---
 
-## Shoulder pitch — worst-case static torque
+## Shoulder Pitch Torque
 
-This joint carries the entire arm, so it is the sizing case. Evaluated at $\theta = 0$, where the arm will experience the maximum load.
+This joint carries the entire arm, so it is the sizing case.
 Masses are estimated as point masses, lengths as distance from center of mass to shoulder pitch axis.
 
 | Symbol | Quantity | Value |
@@ -61,24 +77,39 @@ Masses are estimated as point masses, lengths as distance from center of mass to
 | $m_{\text{f}}$ | Fork | 0.03 kg |
 | $L_{\text{f}}$ | Fork | 28 cm |
 
+Static Torque
+Evaluated at $\theta = 0$, where the arm will experience the maximum load.
 **Payload contribution:**
 
 ```math
 \tau_p = m_p \cdot L_p \cdot \cos 0^\circ = 0.5 \times 30 \times 1 = 15\ \text{kgf·cm}
 ```
 
-**Link + outboard contributions:**
+**Link + servo contributions:**
 
 ```math
-\tau_{\text{link}} = m_{\text{link}} \cdot L_{\text{link}} \cdot \cos 0^\circ = [\text{FILL IN}]\ \text{kgf·cm}
+\tau_{\text{unloaded arm}} = ((m_{\text{se}} \cdot L_{\text{se}}) + (m_{\text{es}} \cdot L_{\text{es}}) + (m_{\text{ew}} \cdot L_{\text{ew}}) + (m_{\text{ws}} \cdot L_{\text{ws}}) + (m_{\text{f}} \cdot L_{\text{f}})) \cdot \cos 0^\circ = \text{}\ \text{kgf·cm}
 ```
 
 **Total static torque at the shoulder:**
 
 ```math
-\tau_{\text{shoulder}} = \tau_p + \tau_{\text{link}} + \dots = [\text{FILL IN}]\ \text{kgf·cm}
+\tau_{\text{shoulder}} = \tau_p + \tau_{\text{unloaded arm}} = \text{19.18}\ \text{kgf·cm}
 ```
 
+Inertial Torque
+Because the acceleration of the arm does not have a requirement, we will set the time to accelerate the arm $90^\circ$ or 1.57 rad to 2 seconds.
+```math
+\alpha = \frac{4(1.57)}{2^2} = 1.57 \text{rad/s}^2
+```
+We then calculate the inertia using the data table above.
+```math
+I = (m_{\text{se}} \cdot (L_{\text{se}})^2) + (m_{\text{es}} \cdot (L_{\text{es}})^2) + (m_{\text{ew}} \cdot (L_{\text{ew}})^2) + (m_{\text{ws}} \cdot (L_{\text{ws}})^2) + (m_{\text{f}} \cdot (L_{\text{f}})^2) = \text{}
+```
+Then we use the formula for inertial torque
+```math
+\tau_I = I \cdot \alpha = (1.57) \cdot () =
+```
 ### Safety factor
 
 The stack is shown as reasoning, not a single opaque multiplier:
@@ -87,7 +118,7 @@ The stack is shown as reasoning, not a single opaque multiplier:
 |---|---|---|
 | Continuous vs. stall | 2.0 | Rated stall torque is not usable continuous torque |
 | Estimation error | 1.2 | Uncertainty in masses and arm lengths |
-| Friction & dynamics | 1.1 | Joint friction, non-static loading |
+| Friction | 1.1 | Joint friction|
 | **Stacked** | **≈ 2.6×** | product of the above |
 
 **Required stall torque:**
