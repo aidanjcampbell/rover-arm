@@ -1,32 +1,31 @@
 # Design Analysis — Robotic Arm
 
-Torque sizing and actuator selection for the 5-DOF arm, worked from first principles.
+Torque sizing and actuator selection for the 4-DOF arm, worked from first principles.
 
 ## Requirement
 
 Lift **0.5 kg** at **30 cm** maximum extension.
 
-Configuration: 2-axis shoulder (pitch + yaw), single-axis elbow, single-axis wrist, gripper.
+Configuration: 2-axis shoulder (pitch + yaw), single-axis elbow, single-axis wrist.
 
 ## Method
-Total Torque:
+**Total Torque:**
 ```math
 \tau_{\text{tot}} = \tau_s + \tau_I
 ```
-Static torque about a joint:
+**Static torque about a joint:**
 ```math
 \tau = m \cdot L \cdot \cos\theta
 ```
-
-Torque is expressed in **kgf·cm**. Because kilogram-force already carries gravitational acceleration, using mass in kg and length in cm yields torque directly — there is no separate $g = 9.81$ term. Worst case is $\theta = 0$ (arm horizontal), where the moment arm is longest.
 
 For a multi-joint system, a joint carries the payload **and** every link and servo outboard of it, each at its own moment arm:
 
 ```math
 \tau_{\text{joint}} = \sum m \cdot L \cdot \cos\theta
 ```
+Torque is expressed in **kgf·cm**. Because kilogram-force already carries gravitational acceleration, using mass in kg and length in cm yields torque directly. Worst case is $\theta = 0$ (arm horizontal), where the moment arm is longest.
 
-Inertial Torque about a joint:
+**Inertial Torque about a joint:**
 
 ```math
 \tau_I = I \cdot \alpha
@@ -48,8 +47,8 @@ Because inertia is calculated in $\text{kg}\cdot m^2$, we convert lengths to met
 
 ## Shoulder Pitch Torque
 
-This joint carries the entire arm, so it is the sizing case.
-Masses are estimated as point masses, lengths as distance from center of mass to shoulder pitch axis.
+This joint carries the entire arm, so it will have the mots torque and will likely be the limiting factor.
+Masses are estimated as point masses and lengths as the distance from center of mass to the shoulder pitch axis.
 
 | Symbol | Quantity | Value |
 |---|---|---|
@@ -60,7 +59,7 @@ Masses are estimated as point masses, lengths as distance from center of mass to
 | $m_{\text{es}}$ | Elbow servo | 0.055 kg |
 | $L_{\text{es}}$ | Elbow servo | 13 cm |
 | $m_{\text{ew}}$ | Elbow-wrist link | 0.04 kg |
-| $L_{\text{ew}}$ | Elbow-wrist link | [20.5] cm |
+| $L_{\text{ew}}$ | Elbow-wrist link | 20.5 cm |
 | $m_{\text{ws}}$ | Wrist servo | 0.055 kg |
 | $L_{\text{ws}}$ | Wrist servo | 26 cm |
 | $m_{\text{f}}$ | Fork | 0.03 kg |
@@ -133,18 +132,15 @@ Converting inertial torque from $\text{N}\cdot\text{m}$ to $\text{kg}\cdot\text{
 | Rated stall torque | 50 kgf·cm |
 | Margin | 5.5% under |
 
-<!--- write up why we chose a servo under safety factor -->
+The ST3250 is under our calculated safety factor, giving us a new safety margin of 2.46. This is a deliberate choice, as we included a large error margin in our estimation and friction safety factor calculations. This choice eats into that safety factor by 5.5%, which is an acceptable tolerance. If the margin below the calculated safety factor was larger, we would have to select another servo.
 
 ---
 
 ## Other joints
 
-<!--
-Duplicate the block below for shoulder yaw, elbow, and wrist.
-Each joint carries only the masses OUTBOARD of it, so torque drops as you move toward the gripper — which is why the ST3215 (lower torque) covers yaw/elbow/wrist while the shoulder pitch needs the ST3250.
--->
+### Elbow Torque
 
-### [Joint name] — worst-case static torque
+Because inertial torque is nominal at this joint and at the wrist joint, those calculations will be omitted as our estimation safety factor provides a significant margin for error.
 
 | Symbol | Quantity | Value |
 |---|---|---|
@@ -158,6 +154,19 @@ Required stall torque (× 2.6): **[FILL IN] kgf·cm** → **ST3215** selected, r
 
 ---
 
+### Wrist Torque
+
+| Symbol | Quantity | Value |
+|---|---|---|
+| ... | ... | [FILL IN] |
+
+```math
+\tau_{\text{[joint]}} = \sum_i m_i \cdot L_i \cdot \cos 0^\circ = [\text{FILL IN}]\ \text{kgf·cm}
+```
+
+Required stall torque (× 2.6): **[FILL IN] kgf·cm** → **ST3215** selected, rated [FILL IN] kgf·cm.
+
+---
 ## Counterweight — tip-over moment
 
 The 2.5 lb plate mounted opposite the arm addresses **static stability** (rover tip-over moment about the front edge of the base). This is a **separate problem** from shoulder-servo torque — the counterweight does **not** reduce the torque the shoulder servo must supply.
