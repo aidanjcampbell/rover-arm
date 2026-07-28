@@ -1,15 +1,3 @@
-<!--
-=============================================================
- DESIGN ANALYSIS — EDITING LEGEND
- - [FILL IN] marks a value you supply from CAD / datasheet.
- - <!-- comments --> are guidance and do NOT render on GitHub.
- - Math uses ```math fenced blocks (display) and $...$ (inline).
-   The fenced block avoids the $8...$12 dollar-sign collision.
- - PREVIEW ON github.com, not VS Code — VS Code won't render $$.
- - Keep units inside \text{...} in math, or in prose.
-=============================================================
--->
-
 # Design Analysis — Robotic Arm
 
 Torque sizing and actuator selection for the 5-DOF arm, worked from first principles.
@@ -51,6 +39,7 @@ and
 ```math
 \alpha = \frac{4\Delta \theta}{T^2}
 ```
+Because inertia is calculated in $\text{kg}\cdot m^2$, we convert lengths to meters to start. Once we calculate inertial torque, we will convert it from $\text{N}\cdot\text{m}$ to $\text{kg}\cdot\text{cm}$ using 10.2 $\text{kg}\cdot\text{cm}$ =1 $\text{N}\cdot\text{m}$ to match our static torque calculations.
 
 ![Free-body diagram — shoulder at θ = 0](img/fbd-shoulder.png)
 <!-- Drop your FBD sketch at docs/img/fbd-shoulder.png. Every symbol below should trace back to this figure. -->
@@ -77,66 +66,74 @@ Masses are estimated as point masses, lengths as distance from center of mass to
 | $m_{\text{f}}$ | Fork | 0.03 kg |
 | $L_{\text{f}}$ | Fork | 28 cm |
 
-Static Torque
+**Static Torque**
+
 Evaluated at $\theta = 0$, where the arm will experience the maximum load.
-**Payload contribution:**
+Payload contribution:
 
 ```math
 \tau_p = m_p \cdot L_p \cdot \cos 0^\circ = 0.5 \times 30 \times 1 = 15\ \text{kgf·cm}
 ```
 
-**Link + servo contributions:**
+Link + servo contributions:
 
 ```math
-\tau_{\text{unloaded arm}} = ((m_{\text{se}} \cdot L_{\text{se}}) + (m_{\text{es}} \cdot L_{\text{es}}) + (m_{\text{ew}} \cdot L_{\text{ew}}) + (m_{\text{ws}} \cdot L_{\text{ws}}) + (m_{\text{f}} \cdot L_{\text{f}})) \cdot \cos 0^\circ = \text{}\ \text{kgf·cm}
+\tau_{\text{unloaded arm}} = ((m_{\text{se}} \cdot L_{\text{se}}) + (m_{\text{es}} \cdot L_{\text{es}}) + (m_{\text{ew}} \cdot L_{\text{ew}}) + (m_{\text{ws}} \cdot L_{\text{ws}}) + (m_{\text{f}} \cdot L_{\text{f}})) \cdot \cos 0^\circ = \text{4.18}\ \text{kgf·cm}
 ```
 
-**Total static torque at the shoulder:**
+Total static torque at the shoulder:
 
 ```math
-\tau_{\text{shoulder}} = \tau_p + \tau_{\text{unloaded arm}} = \text{19.18}\ \text{kgf·cm}
+\tau_s = \tau_p + \tau_{\text{unloaded arm}} = 19.18 \text{kgf·cm}
 ```
 
-Inertial Torque
+**Inertial Torque**
+
 Because the acceleration of the arm does not have a requirement, we will set the time to accelerate the arm $90^\circ$ or 1.57 rad to 2 seconds.
 ```math
 \alpha = \frac{4(1.57)}{2^2} = 1.57 \text{rad/s}^2
 ```
 We then calculate the inertia using the data table above.
 ```math
-I = (m_{\text{se}} \cdot (L_{\text{se}})^2) + (m_{\text{es}} \cdot (L_{\text{es}})^2) + (m_{\text{ew}} \cdot (L_{\text{ew}})^2) + (m_{\text{ws}} \cdot (L_{\text{ws}})^2) + (m_{\text{f}} \cdot (L_{\text{f}})^2) = \text{}
+I = (m_{\text{se}} \cdot (L_{\text{se}})^2) + (m_{\text{es}} \cdot (L_{\text{es}})^2) + (m_{\text{ew}} \cdot (L_{\text{ew}})^2) + (m_{\text{ws}} \cdot (L_{\text{ws}})^2) + (m_{\text{f}} \cdot (L_{\text{f}})^2) = 0.0538 \text{kg}\cdot\text{m}
 ```
-Then we use the formula for inertial torque
+Then we use the formula for total inertial torque
 ```math
-\tau_I = I \cdot \alpha = (1.57) \cdot () =
+\tau_I = I \cdot \alpha = (1.57)\text{rad/s}^2 \cdot (0.0538)\text{kg}\cdot\text{m} = 0.08 \text{N}\cdot\text{m} 
 ```
-### Safety factor
-
-The stack is shown as reasoning, not a single opaque multiplier:
+Converting inertial torque from $\text{N}\cdot\text{m}$ to $\text{kg}\cdot\text{cm}$
+```math
+0.08 \text{N}\cdot\text{m} \cdot \frac{10.2 \text{kg}\cdot\text{cm}}{1 \text{N}\cdot\text{m}} = 0.86 \text{kg}\cdot\text{cm}
+```
+**Total Shoulder Torque**
+```math
+\tau_\text{tot} = \tau_s + \tau_I = 19.18 \text{kgf·cm} + 0.86 \text{kgf·cm} = 20.04 \text{kgf·cm}
+```
+### Safety Factor
 
 | Factor | Value | Rationale |
 |---|---|---|
 | Continuous vs. stall | 2.0 | Rated stall torque is not usable continuous torque |
 | Estimation error | 1.2 | Uncertainty in masses and arm lengths |
 | Friction | 1.1 | Joint friction|
-| **Stacked** | **≈ 2.6×** | product of the above |
+| **Stacked** | **≈ 2.64×** | product of the above |
 
 **Required stall torque:**
 
 ```math
-\tau_{\text{req}} = \tau_{\text{shoulder}} \times 2.6 = [\text{FILL IN}]\ \text{kgf·cm}
+\tau_\text{req} =  20.04 \text{kgf·cm} \cdot 2.6 = 52.9 \text{kgf·cm}
 ```
 
 ### Selection
 
 | Spec | Value |
 |---|---|
-| Required stall torque | [FILL IN] kgf·cm |
+| Required stall torque | 52.9 kgf·cm |
 | Servo selected | ST3250 |
-| Rated stall torque | [FILL IN] kgf·cm |
-| Margin | [FILL IN]× |
+| Rated stall torque | 50 kgf·cm |
+| Margin | 5.5% under |
 
-<!-- ST3250 stall torque is on the Feetech datasheet. Margin = rated / required. State whether the margin confirms the choice or flags it as tight. -->
+<!--- write up why we chose a servo under safety factor -->
 
 ---
 
@@ -201,4 +198,4 @@ Stability requires $M_{\text{restore}} \geq M_{\text{tip}}(\theta)$ across the f
 
 <!-- Link the measured result here so the analysis connects to real hardware. Keep the number on the page. -->
 
-Demonstrated lift: **800 g** at [FILL IN] cm extension — exceeds the 0.5 kg requirement. Full test conditions and video: see [`engineering-log.md`](engineering-log.md).
+Demonstrated lift: **800 g** at [FILL IN] cm extension — exceeds the 0.5 kg requirement.
