@@ -1,4 +1,4 @@
-# Design Analysis — Robotic Arm
+# Torque Calculations — Robotic Arm
 
 Torque sizing and actuator selection for the 4-DOF arm, worked from first principles.
 
