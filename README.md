@@ -23,7 +23,7 @@
 | | |
 |---|---|
 | <video src="https://github.com/user-attachments/assets/2f1f47b2-ee3e-4f93-816e-9f0f6ca2fb46" width="600" controls></video> | **Payload test** — 1000 g held at 30 cm extension |
-| <video src="" width="600" controls></video> | **Range of motion** — all 4 DOF |
+| <video src="https://github.com/user-attachments/assets/bf31a69f-e857-4212-957e-26ef690fe233" width="600" controls></video> | **Range of motion** — all 4 DOF |
 | <video src="https://github.com/user-attachments/assets/c3312b9b-7194-4d76-a24a-d6187b4e6c03" width="600" controls></video> | **Control** — hold-to-jog from phone over onboard WiFi |
 
 ▶ [Full 3-minute design walkthrough](https://youtube.com/your-link)
