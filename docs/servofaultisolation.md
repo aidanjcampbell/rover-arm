@@ -24,6 +24,7 @@ Before touching anything, I listed every layer that could produce total silence:
 - a defect on the board itself
 
 Here is my full problem diagnosis tree:
+<img src="/media/servodiagnosistree.jpg" width="700">
 
 
 To efficiently work through this tree and eliminate as many potential problems as possible while following the hint the status light gave me, I decided to start on the software side of the tree. In doing this I was able to eliminate any potential software bugs before I tried replacing hardware, which costs time and money. 
