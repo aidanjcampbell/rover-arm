@@ -88,7 +88,7 @@ Result: The counterweight is estimated to provide 81.5 kg*cm of torque opposite 
 
 <table>
   <tr>
-    <td><img src="media/shoulder-cad.png" width="400"/></td>
+    <td><img src="media/chassis-render.png" width="400"/></td>
     <td><img src="media/internalchassis-photo.jpg" width="400"/></td>
   </tr>
   <tr>
@@ -96,23 +96,23 @@ Result: The counterweight is estimated to provide 81.5 kg*cm of torque opposite 
     <td align="center"><em>As built with internal electronics</em></td>
   </tr>
   <tr>
-    <td><img src="media/shoulder-cad.png" width="400"/></td>
+    <td><img src="media/elbow-wrist-link-render.png" width="400"/></td>
     <td><img src="media/elbow-wrist-link-photo.jpg" width="400"/></td>
   </tr>
   <tr>
-    <td align="center"><em>Elbow-wrist link — CAD</em></td>
-    <td align="center"><em>As built</em></td>
+    <td align="center"><em>Elbow-wrist link render — CAD</em></td>
+    <td align="center"><em>As built integrated into arm </em></td>
   </tr>
   <tr>
-    <td><img src="media/shoulder-cad.png" width="400"/></td>
+    <td><img src="media/counterweight-assembly-render.png" width="400"/></td>
     <td><img src="media/counterweight-assembly-photo.jpg" width="400"/></td>
   </tr>
   <tr>
-    <td align="center"><em>Counterweight assembly — CAD</em></td>
+    <td align="center"><em>Counterweight assembly render— CAD</em></td>
     <td align="center"><em>As built with 2.5LB(1.1KG) plate </em></td>
   </tr>
   <tr>
-    <td><img src="media/shoulder-cad.png" width="400"/></td>
+    <td><img src="media/wheel-assembly-render.PNG" width="400"/></td>
     <td><img src="media/wheel_assembly-photo.jpg" width="400"/></td>
   </tr>
   <tr>
@@ -120,8 +120,6 @@ Result: The counterweight is estimated to provide 81.5 kg*cm of torque opposite 
     <td align="center"><em>As built with non-drive wheel and TPU tire </em></td>
   </tr>
 </table>
-
-*[+ 4–6 more: forearm truss, fork end-effector, full assembly with object for scale, 1–2 annotated.]*
 
 ---
 
