@@ -20,12 +20,12 @@ The switch consolidated the electronics onto a single robotics-purpose board and
 
 ## Diagram 1 — Original architecture (Arduino Uno)
 
-<img src="media/wiring-diagram-v.1.svg" width="700" alt="Original wiring: Arduino Uno prototype architecture">
+<img src="/media/wiring-diagram-v.1.svg" width="700" alt="Original wiring: Arduino Uno prototype architecture">
 
 The initial prototype: This setup worked well in the beginning as I was familiar with using the Arduino Uno R3, but quickly reached its limits once I needed to add the servo bus and control.
 
 ## Diagram 2 — Current architecture (Waveshare ESP32)
 
-<img src="media/wiring-diagram-v.2.svg" width="700" alt="Current wiring: Waveshare General Driver (ESP32) architecture">
+<img src="/media/wiring-diagram-v.2.svg" width="700" alt="Current wiring: Waveshare General Driver (ESP32) architecture">
 
 The current system: power distribution from the 3S LiPo, the ESP32 hosting the Wi-Fi AP and web interface, the integrated TB6612FNG driving the drive motors, and the Feetech servo bus running on `Serial1` (GPIO18 `S_RXD` / GPIO19 `S_TXD`), half-duplex at 1,000,000 baud.
