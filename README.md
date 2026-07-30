@@ -89,11 +89,35 @@ Result: The counterweight is estimated to provide 81.5 kg*cm of torque opposite 
 <table>
   <tr>
     <td><img src="media/shoulder-cad.png" width="400"/></td>
-    <td><img src="media/shoulder-real.jpg" width="400"/></td>
+    <td><img src="media/internalchassis-photo.jpg" width="400"/></td>
   </tr>
   <tr>
-    <td align="center"><em>Shoulder assembly — CAD</em></td>
-    <td align="center"><em>As built, with counterbalance spring</em></td>
+    <td align="center"><em>Chassis render — CAD</em></td>
+    <td align="center"><em>As built with internal electronics</em></td>
+  </tr>
+  <tr>
+    <td><img src="media/shoulder-cad.png" width="400"/></td>
+    <td><img src="media/elbow-wrist-link-photo.jpg" width="400"/></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Elbow-wrist link — CAD</em></td>
+    <td align="center"><em>As built</em></td>
+  </tr>
+  <tr>
+    <td><img src="media/shoulder-cad.png" width="400"/></td>
+    <td><img src="media/counterweight-assembly-photo.jpg" width="400"/></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Counterweight assembly — CAD</em></td>
+    <td align="center"><em>As built with 2.5LB(1.1KG) plate </em></td>
+  </tr>
+  <tr>
+    <td><img src="media/shoulder-cad.png" width="400"/></td>
+    <td><img src="media/wheel_assembly-photo.jpg" width="400"/></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Wheel assembly — CAD</em></td>
+    <td align="center"><em>As built with non-drive wheel and TPU tire </em></td>
   </tr>
 </table>
 
