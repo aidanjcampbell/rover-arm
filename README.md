@@ -60,7 +60,7 @@ All structural design, torque budgeting, and component selection are my own work
 
 Intending to build the entire rover off of the Arduino Uno R3 as my command module, I developed the entire base of the rover using this architecture until I realized that its limited pin numbers were going to cause problems when adding the servo bus. I then made the decision to start from scratch with the ESP32 General Robotics Driver.
 
-Result: The General Robotics Driver integrated the TB1266FNG motor driver, wireless control, and the servo control all into one chip, giving us the number of pins we needed while simplifying electronics with a 47% reduction in internal wires (34 before, 18 after). Here is the full breakdown: [wiringdiagrams.md](wiringdiagrams.md)
+Result: The General Robotics Driver integrated the TB1266FNG motor driver, wireless control, and the servo control all into one chip, giving us the number of pins we needed while simplifying electronics with a 47% reduction in internal wires (34 before, 18 after). Here is the full breakdown: [docs/wiringdiagrams.md](docs/wiringdiagrams.md)
 
 ### Servo Selection & Safety Factor
 
