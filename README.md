@@ -1,8 +1,8 @@
 # Rover-Arm — 4-DOF Rover-Mounted Robotic Arm
 
-![Arm lifting 800g at full extension](media/herogif_edit.gif)
+![media/herogif_edit.gif](media/herogif_edit.gif)
 
-**A 3D-printed 4-DOF robotic arm lifting 800 g at 30 cm reach, 60% over its 0.5 kg design target. The rover is driven by 2x 12V DC Motors while the arm is powered by 4x Feetech servos, all controlled wirelessly by the ESP32. Designed, built, and tested from scratch.**
+**A 3D-printed 4-DOF robotic arm lifting 1000 g at 30 cm reach, 200% of its 0.5 kg design target. 2x 12V DC Motors drive the rover while 4x Feetech servos power the arm, all controlled wirelessly by the ESP32. Designed, built, and tested from scratch.**
 ---
 
 ## Contents
@@ -26,8 +26,6 @@
 | <video src="https://github.com/user-attachments/assets/9e35d78c-9f56-43b6-9285-de8e3515913f" width="600" controls></video> | **Range of motion** — all 4 DOF |
 | <video src="https://github.com/user-attachments/assets/c3312b9b-7194-4d76-a24a-d6187b4e6c03" width="600" controls></video> | **Control** — hold-to-jog from phone over onboard WiFi |
 
-▶ [Full 3-minute design walkthrough](https://youtube.com/your-link)
-
 ---
 
 ## Overview
@@ -36,8 +34,6 @@ I set out to design a mobile rover-mounted manipulator that lifts 0.5 kg at 30 c
 
 All structural design, torque budgeting, and component selection are my own work. Firmware was developed with AI assistance (Claude) to move quickly through boilerplate code and debugging, keeping my focus on the mechanical design and system integration. I directed the architecture, integrated it with the hardware, and validated all behavior on the physical build.
 
- The arm currently lifts and holds 800g (60% above its design target) with the working payload ceiling now limited by platform stability rather than the actuator, which is the focus of ongoing work.
-
 ---
 
 ## Specifications
@@ -45,7 +41,7 @@ All structural design, torque budgeting, and component selection are my own work
 | Parameter | Value |
 |---|---|
 | Design payload | 0.5 kg @ 30 cm extension |
-| Demonstrated payload | 0.9 kg @ 30 cm *(platform-limited, not actuator-limited)* |
+| Demonstrated payload | 1.0 kg @ 30 cm |
 | Reach | 30 cm |
 | Actuators | ST3250 (50 kg·cm) · 3× ST3215 (30 kg·cm)|
 |Drive Motors| 2x 12V DC 100RPM Motors
@@ -81,12 +77,10 @@ Result: The counterweight is estimated to provide 81.5 kg*cm of torque opposite 
 
 | # | Requirement | Design response | Verification |
 |---|---|---|---|
-| R1 | Lift 0.5 kg @ 30 cm | ST3250 shoulder + optimized truss designs | ✅ **Passed** — held 0.5 kg at full extension; demonstrated to 0.8 kg |
-| R2 | Mobile rover base capable of supporting arm | Differential drive DC motors + custom ball bearing + counterweight |  ** Repeatability ±X° over N cycles *(pending)* |
-| R3 | Untethered operation | Onboard WiFi AP + 3S LiPo | ** Runtime test pending |
+| R1 | Lift 0.5 kg @ 30 cm | ST3250 shoulder + optimized truss designs + modular countereweight system | ✅ **Passed** — held 0.5 kg at full extension; demonstrated to 1.0 kg |
+| R2 | Mobile rover base capable of supporting arm | Differential drive DC motors + custom ball bearing + counterweight |   |
+| R3 | Untethered operation | Onboard WiFi AP + 3S LiPo | ✅ **Passed** — operated for 20 minutes with arm under variable loads |
 | R4 | Consumer-FDM printable | All parts fit P1S bed | ✅ Verified — print inventory in `/cad` |
-
-*Max payload ceiling pending resolution of base stability (see above).*
 
 ---
 
@@ -139,8 +133,8 @@ Source and structure in [`/src`](src/).
 ## Development Timeline
 
 - **Getting Started** - Prototyped rover base with intention to use Arduino Uno R3 & HC-05 Bluetooth module for wireless control
-- **Architecure Swap** - Swapped Arduino for ESP32 General Robotics Driver after realizing pin limitations
-- **Actuator sizing** - Torque & inertia calculations + safety-factor decomposition → ST3250 at shoulder pitch.
+- **Architecure Swap** - Swapped Arduino for ESP32 General Robotics Driver after realizing pin limitations (see more [here](docs/wiringdiagrams.md))
+- **Actuator sizing** - Torque & inertia calculations + safety-factor decomposition → ST3250 at shoulder pitch (see calculations [here](torquecalculations.md)).
 - **Servo bus bring-up** — Isolated a driver-board transceiver fault ([case study](docs/servo-issue.md)); first joint motion on replacement board.
 - **Elbow-Wrist Linkage** — Designed/printed lightweight Warren-truss forearm to optimize strength within weight constraints
 - **Payload test passed** — 0.5 kg at 30 cm (R1); demonstrated to 0.8 kg.
@@ -151,4 +145,4 @@ Source and structure in [`/src`](src/).
 
 ## About
 
-Mechanical engineering student, Georgia Tech. · [LinkedIn](#) · [email](#)
+Mechanical engineering student, Georgia Tech. · [LinkedIn](#) · [email](aidanjcampbell1@gmail.com)
