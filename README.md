@@ -1,6 +1,6 @@
 # Rover-Arm — 4-DOF Rover-Mounted Robotic Arm
 
-![Arm lifting 800g at full extension](media/800g_demo.gif)
+![Arm lifting 800g at full extension](media/herogif_edit.gif)
 
 **A 3D-printed 4-DOF robotic arm lifting 800 g at 30 cm reach, 60% over its 0.5 kg design target. The rover is driven by 2x 12V DC Motors while the arm is powered by 4x Feetech servos, all controlled wirelessly by the ESP32. Designed, built, and tested from scratch.**
 ---
