@@ -22,7 +22,7 @@
 
 | | |
 |---|---|
-| (https://github.com/user-attachments/assets/2f1f47b2-ee3e-4f93-816e-9f0f6ca2fb46) | **Payload test** — 1000 g held at 30 cm extension |
+| <video src="https://github.com/user-attachments/assets/2f1f47b2-ee3e-4f93-816e-9f0f6ca2fb46" width="600" controls></video> | **Payload test** — 1000 g held at 30 cm extension |
 | ![Range of motion](media/DOF_demo_2.gif) | **Range of motion** — all 4 DOF |
 | ![Web control](media/web-ui.gif) | **Control** — hold-to-jog from phone over onboard WiFi |
 
