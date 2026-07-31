@@ -95,11 +95,11 @@ I = (m_{\text{se}} \cdot (L_{\text{se}})^2) + (m_{\text{es}} \cdot (L_{\text{es}
 ```
 Then we use the formula for total inertial torque
 ```math
-\tau_I = I \cdot \alpha = (1.57)\text{rad/s}^2 \cdot (0.0538)\text{kg}\cdot\text{m} = 0.08 \text{N}\cdot\text{m} 
+\tau_I = I \cdot \alpha = (1.57)\text{rad/s}^2 \cdot (0.0538)\text{kg}\cdot\text{m}^2 = 0.08 \text{N}\cdot\text{m} 
 ```
 Converting inertial torque from $\text{N}\cdot\text{m}$ to $\text{kg}\cdot\text{cm}$
 ```math
-0.08 \text{N}\cdot\text{m} \cdot \frac{10.2 \text{kg}\cdot\text{cm}}{1 \text{N}\cdot\text{m}} = 0.86 \text{kgf}\cdot\text{cm}
+0.08 \text{N}\cdot\text{m} \cdot \frac{10.2 \text{kgf}\cdot\text{cm}}{1 \text{N}\cdot\text{m}} = 0.86 \text{kgf}\cdot\text{cm}
 ```
 **Total Shoulder Torque**
 ```math
