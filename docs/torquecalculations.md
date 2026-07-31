@@ -15,7 +15,7 @@ Configuration: 2-axis shoulder (pitch + yaw), single-axis elbow, single-axis wri
 ```
 **Static torque about a joint:**
 ```math
-\tau = m \cdot L \cdot \cos\theta
+\tau_{\text{s}} = m \cdot L \cdot \cos\theta
 ```
 
 For a multi-joint system, a joint carries the payload **and** every link and servo outboard of it, each at its own moment arm:
@@ -80,7 +80,7 @@ Link + servo contributions:
 Total static torque at the shoulder:
 
 ```math
-\tau_s = \tau_p + \tau_{\text{unloaded arm}} = 19.18 \text{kgf·cm}
+\tau_{\text{shoulder}} = \tau_p + \tau_{\text{unloaded arm}} = 19.18 \text{kgf·cm}
 ```
 
 **Inertial Torque**
@@ -189,8 +189,6 @@ Plate spec: one 2.5 lb steel plate = **1.134 kg**.
 | $m_{cw}$ | Counterweight mass (1 plate) | 1.134 kg |
 | $d_{cw}$ | Moment arm (tipping line → CW center of mass) | 23 cm |
 
-<sub>Torque in kgf·cm — the gravitational term is carried by the kilogram-force unit, so mass (kg) × arm (cm) gives torque directly.</sub>
-
 ### Single plate — 0.5 kg payload
 
 ```math
@@ -237,7 +235,7 @@ Restoring torque exceeds tipping torque by **2.29×** at full extension (θ = 0)
 
 ### Dynamic loading margin
 
-The stability check above assumes the arm is stationary. In motion — accelerating a joint or stopping suddenly at a limit — inertial forces briefly add to the tipping side on top of the static gravitational torque. A rigorous treatment would sum $m_i \alpha r_i^2$ across every link mass using a measured angular acceleration, but without that hardware data, I used a conservative padding factor instead.
+The stability check above assumes the arm is stationary. In motion — accelerating a joint or stopping suddenly at a limit — inertial forces briefly add to the tipping side on top of the static gravitational torque. A rigorous treatment would sum $i \alpha r^2$ across every link mass using a measured angular acceleration, but without that hardware data, I used a conservative padding factor instead.
 
 A **1.5× dynamic multiplier** is applied to the static tipping torque to bound worst-case deceleration (e.g. a hard limit-switch stop):
 
@@ -251,7 +249,7 @@ Checking this against the existing restoring torque:
 SF_{dynamic} = \frac{\tau_{restore}}{\tau_{tip,dynamic}} = \frac{33.854}{22.176} = 1.53\times
 ```
 
-The single-plate counterweight still restores the rover with margin under a padded worst-case dynamic load, though — as expected — the margin compresses from 2.29× to 1.53× once motion is accounted for.
+The single-plate counterweight still restores the rover with margin under a padded worst-case dynamic load, though the margin compresses from 2.29× to 1.53× once motion is accounted for.
 
 **Sizing for a target dynamic margin.** Using the general sizing relationship established above, the minimum plate count for a given dynamic safety factor is:
 
@@ -266,6 +264,3 @@ n \geq \frac{2.0(22.176) - 7.7722}{26.082} = \frac{36.580}{26.082} = 1.40 \right
 ```
 
 **Limitations.** The 1.5× factor is an assumed conservative bound, not a measured value — it was not derived from servo acceleration data. A more precise figure would require measuring joint angular acceleration (α) during a commanded move or hard stop, e.g. via high-speed video, and computing $\tau_{dyn} = \sum m_i \alpha r_i^2$ across the arm's link masses. This is documented as a scoped next step rather than a completed measurement.
-## Validation
-
-Demonstrated lift: **800 g** at [FILL IN] cm extension — exceeds the 0.5 kg requirement.
