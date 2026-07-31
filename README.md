@@ -59,15 +59,15 @@ Intending to build the entire rover off of the Arduino Uno R3 as my command modu
 Result: The General Robotics Driver integrated the TB1266FNG motor driver, wireless control, and the servo control all into one chip, giving us the number of pins we needed while simplifying electronics with a 47% reduction in internal wires (34 before, 18 after). Here is the full breakdown: [docs/wiringdiagrams.md](docs/wiringdiagrams.md)
 
 ### Servo Selection & Safety Factor
-As I had no prior experience with robotic arms, I needed a way to break down the problem of servo selection into first principles. To do this, I calculated the torque required for the shoulder joint to lift the arm and  0.5 KG payload with a safety factor of 2.64 to be 52.9 kg·cm. I also did these calculations for the other joints, which you can see alongside the actual math [here](docs/torquecalculations.md).
+As I had no prior experience with robotic arms, I needed a way to break down the problem of servo selection into first principles. To do this, I calculated the torque required for the shoulder joint to lift the arm and a 0.5 KG payload with a safety factor of 2.64 to be 52.9 kg·cm. I also did these calculations for the other joints, which you can see alongside the actual math [here](docs/torquecalculations.md).
 
 Result: I chose the ST3250 servo with 50kg·cm of torque for the shoulder joint. Though it was 5.5% under my calculated safety factor, I reasoned it to be the ideal choice (click the link above for details), and the payload tests affirmed this decision.
 
 ### Warren-Truss Forearm Link
 
-The elbow-to-wrist link needed high bending stiffness at a very low mass to allow the actuators to lift the target payload. Rather than a solid printed beam, I used a Warren-truss geometry, which carries load through members in tension/compression rather than bending. The Fusion 360 model is parametric with member angles and lengths driven by expressions of the link length, so the truss regenerates correctly whenever the overall geometry changes without manual rework. See the render beside the integrated truss [here](#build-gallery)
+The elbow-to-wrist link needed high bending stiffness at a very low mass to allow the actuators to lift the target payload. Rather than a solid printed beam, I used a Warren-truss geometry, which carries load through members in tension/compression rather than bending. The Fusion 360 model is parametric with member angles and lengths driven by expressions of the link length, so the truss regenerates correctly whenever the overall geometry changes without manual rework. See the render beside the integrated truss [here](#build-gallery).
 
-### Base Stability Under Payload (in progress)
+### Base Stability Under Payload
 
 Passing the payload test exposed the next constraint: at full extension, the combined center of gravity shifts forward of the front wheel contact line and the rover tips. Because this is a *mobile* platform, any counterweight added needs to be modular and fixed opposite the arm on the rotating base to counter the torque applied to the arm in any position. 
 
