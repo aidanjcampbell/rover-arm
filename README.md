@@ -165,7 +165,7 @@ Source and structure in [`/src`](src/).
 - **Elbow-Wrist Linkage** - Designed/printed lightweight Warren-truss forearm to optimize strength within weight constraints
 - **Payload test passed** - 0.5 kg at 30 cm (R1); demonstrated to 0.8 kg.
 - **Base stability** — Diagnosed forward tipping resulting from heavy loads lifted by the arm and designed and printed a modular counterweight structure that could be variably loaded depending on arm load
-- **Shoulder Joint Failure** - When lifting 1000g, the shoulder-elbow linkage deformed where it mounted to the shoulder servo and caused the arm to fail (view [here](media/shoulder-joint-failure)). Resolved by increasing the wall thickness and infill percent on the second iteration print.
+- **Shoulder Joint Failure** - When lifting 1000g, the shoulder-elbow linkage deformed where it mounted to the shoulder servo and caused the arm to fail (view [here](media/1000g-test-failure.mp4)). Resolved by increasing the wall thickness and infill percent on the second iteration print.
 - **1000g Payload Test** - Arm successfully lifted 1000g (200% of design target) and demonstrated mobile capability while under that load. Due to heat in the shoulder servo body, testing has been stopped to ensure the rover's continued function.
 
 ---
