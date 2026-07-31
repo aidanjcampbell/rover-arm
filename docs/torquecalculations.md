@@ -38,17 +38,14 @@ and
 ```math
 \alpha = \frac{4\Delta \theta}{T^2}
 ```
-Because inertia is calculated in $\text{kg}\cdot m^2$, we convert lengths to meters to start. Once we calculate inertial torque, we will convert it from $\text{N}\cdot\text{m}$ to $\text{kg}\cdot\text{cm}$ using 10.2 $\text{kg}\cdot\text{cm}$ =1 $\text{N}\cdot\text{m}$ to match our static torque calculations.
-
-![Free-body diagram — shoulder at θ = 0](img/fbd-shoulder.png)
-<!-- Drop your FBD sketch at docs/img/fbd-shoulder.png. Every symbol below should trace back to this figure. -->
+Because inertia is calculated in $\text{kg}\cdot m^2$, we convert lengths to meters to start. Once we calculate inertial torque, we will convert it from $\text{N}\cdot\text{m}$ to $\text{kgf}\cdot\text{cm}$ using 10.2 $\text{kgf}\cdot\text{cm}$ =1 $\text{N}\cdot\text{m}$ to match our static torque calculations.
 
 ---
 
 ## Shoulder Pitch Torque
 
-This joint carries the entire arm, so it will have the mots torque and will likely be the limiting factor.
-Masses are estimated as point masses and lengths as the distance from center of mass to the shoulder pitch axis.
+This joint carries the entire arm, so it will have the most torque and will likely be the limiting factor.
+Masses are estimated as point masses and lengths as the distances from the center of mass to the shoulder pitch axis.
 
 | Symbol | Quantity | Value |
 |---|---|---|
@@ -94,7 +91,7 @@ Because the acceleration of the arm does not have a requirement, we will set the
 ```
 We then calculate the inertia using the data table above.
 ```math
-I = (m_{\text{se}} \cdot (L_{\text{se}})^2) + (m_{\text{es}} \cdot (L_{\text{es}})^2) + (m_{\text{ew}} \cdot (L_{\text{ew}})^2) + (m_{\text{ws}} \cdot (L_{\text{ws}})^2) + (m_{\text{f}} \cdot (L_{\text{f}})^2) = 0.0538 \text{kg}\cdot\text{m}
+I = (m_{\text{se}} \cdot (L_{\text{se}})^2) + (m_{\text{es}} \cdot (L_{\text{es}})^2) + (m_{\text{ew}} \cdot (L_{\text{ew}})^2) + (m_{\text{ws}} \cdot (L_{\text{ws}})^2) + (m_{\text{f}} \cdot (L_{\text{f}})^2) + (m_p \cdot (L_p)^2)= 0.0538 \text{kg}\cdot\text{m}^2
 ```
 Then we use the formula for total inertial torque
 ```math
@@ -102,7 +99,7 @@ Then we use the formula for total inertial torque
 ```
 Converting inertial torque from $\text{N}\cdot\text{m}$ to $\text{kg}\cdot\text{cm}$
 ```math
-0.08 \text{N}\cdot\text{m} \cdot \frac{10.2 \text{kg}\cdot\text{cm}}{1 \text{N}\cdot\text{m}} = 0.86 \text{kg}\cdot\text{cm}
+0.08 \text{N}\cdot\text{m} \cdot \frac{10.2 \text{kg}\cdot\text{cm}}{1 \text{N}\cdot\text{m}} = 0.86 \text{kgf}\cdot\text{cm}
 ```
 **Total Shoulder Torque**
 ```math
