@@ -30,7 +30,7 @@
 
 ## Overview
 
-I set out to design a mobile rover-mounted manipulator that lifts 0.5 kg at 30 cm extension, with every structural component printable on a consumer FDM machine and a total cost under $300. The arm has a 2-axis shoulder (pitch + yaw), single-axis elbow and wrist, and a fork-style end effector, all driven by Feetech serial bus servos on a single half-duplex TTL line.
+I set out to design a mobile rover-mounted manipulator that lifts 0.5 kg at 30 cm extension, with every structural component printable on a consumer FDM machine. The arm has a 2-axis shoulder (pitch + yaw), single-axis elbow and wrist, and a fork-style end effector, all driven by Feetech serial bus servos on a single half-duplex TTL line.
 
 All structural design, torque budgeting, and component selection are my own work. Firmware was developed with AI assistance (Claude) to move quickly through boilerplate code and debugging, keeping my focus on the mechanical design and system integration. I directed the architecture, integrated it with the hardware, and validated all behavior on the physical build.
 
@@ -80,7 +80,7 @@ Result: I developed and designed a modular counterweight system adaptable to any
 | # | Requirement | Design response | Verification |
 |---|---|---|---|
 | R1 | Lift 0.5 kg @ 30 cm | ST3250 shoulder + optimized truss designs + modular countereweight system | ✅ **Passed** — held 0.5 kg at full extension; demonstrated to 1.0 kg |
-| R2 | Mobile rover base capable of supporting arm | Differential drive DC motors + custom ball bearing + counterweight |   |
+| R2 | Mobile rover base capable of supporting arm | Differential drive DC motors + custom ball bearing + counterweight | ✅ **Passed** — Rover stays stable while executing rapid maneuvers with an arm payload of 1000g (view the mobility test [here](media/mobility-test.mp4)) |
 | R3 | Untethered operation | Onboard WiFi AP + 3S LiPo | ✅ **Passed** — operated for 20 minutes with arm under variable loads |
 | R4 | Consumer-FDM printable | All parts fit P1S bed | ✅ Verified — print inventory in `/cad` |
 
