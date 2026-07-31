@@ -167,13 +167,52 @@ Required stall torque (× 2.6): **[FILL IN] kgf·cm** → **ST3215** selected, r
 Required stall torque (× 2.6): **[FILL IN] kgf·cm** → **ST3215** selected, rated [FILL IN] kgf·cm.
 
 ---
+## Counterweight torque
+
+The counterweight supplies the **restoring moment** that opposes the arm's tipping moment about the front tipping line. Because it is mounted on the shoulder opposite the arm, it swings through the same arc, so its moment arm is the horizontal distance from the tipping line to the plate's center of mass. Because the tipping line at the front wheels is the most prone to flipping, we will calculate the torque from this tipping point.
+
+Plate spec: one 2.5 lb steel plate = **1.134 kg**.
+
+| Symbol | Quantity | Value |
+|---|---|---|
+| $m_{cw}$ | Counterweight mass (1 plate) | 1.134 kg |
+| $d_{cw}$ | Moment arm (tipping line → CW center of mass) | 23 cm |
+
+<sub>Torque in kgf·cm — the gravitational term is carried by the kilogram-force unit, so mass (kg) × arm (cm) gives torque directly.</sub>
+
+### Single plate — 0.5 kg payload
+
+```math
+\tau_{cw} = m_{cw} \cdot d_{cw} = 1.134 \times 23 = 26.082\ \text{kgf·cm}
+```
+
+This 26.082 kgf·cm is the restoring torque the counterweight directly provides, sizing the arm to lift a 0.5 kg (500 g) payload at full extension. Combined with the chassis restoring moment, it yields the full stability margin recorded in the tip-over section.
+
+### Two plates — 1.0 kg payload
+
+Doubling the payload to 1.0 kg (1000 g) doubles the tipping moment the counterweight must offset. Since the 23 cm moment arm is fixed, the counterweight torque scales linearly with plate mass, so the plate count doubles. Two 2.5 lb plates give 2.267 kg:
+
+```math
+\tau_{cw} = m_{cw} \cdot d_{cw} = 2.267 \times 23 = 52.141\ \text{kgf·cm}
+```
+
+### Payload-to-counterweight scaling
+
+| Payload | Counterweight | CW mass | Moment arm | Counterweight torque |
+|---|---|---|---|---|
+| 0.5 kg (500 g) | 1 × 2.5 lb plate | 1.134 kg | 23 cm | 26.082 kgf·cm |
+| 1.0 kg (1000 g) | 2 × 2.5 lb plates | 2.267 kg | 23 cm | 52.141 kgf·cm |
+
+With the moment arm held constant at 23 cm, each 2.5 lb plate contributes a fixed **26.082 kgf·cm** of restoring torque. The counterweight requirement therefore scales one plate per 500 g of payload — a linear, easily-extended sizing rule rather than a one-off value.
+
 ## Counterweight — tip-over moment
 
 The 2.5 lb plate mounted opposite the arm addresses **static stability** (rover tip-over moment about the front edge of the base). This is a **separate problem** from shoulder-servo torque — the counterweight does **not** reduce the torque the shoulder servo must supply.
 
-<!-- Keep this distinction explicit. Conflating tip-over moment with shoulder torque reduction is the single most common misread of this system. -->
 
-The restoring moment from the counterweight varies with arm angle as the arm's CG swings through its arc:
+To calculate the torque our counterweight provides, we will assume the arm is in the position most prone to tipping, fully outstretched and horizontal extending out from the front of the rover. By ensuring that our counterweight can support the arm from this position, we also can ensure that the arm will be stable in other positions as well.
+
+There are four main forces of torque in this system:
 
 ```math
 M_{\text{tip}}(\theta) = m_{\text{arm}} \cdot d_{\text{arm}} \cdot \cos\theta
@@ -183,15 +222,6 @@ M_{\text{tip}}(\theta) = m_{\text{arm}} \cdot d_{\text{arm}} \cdot \cos\theta
 M_{\text{restore}} = m_{\text{cw}} \cdot d_{\text{cw}}
 ```
 
-Stability requires $M_{\text{restore}} \geq M_{\text{tip}}(\theta)$ across the full range. Because the arm's tipping moment scales with $\cos\theta$, it is worst at full horizontal extension and vanishes when vertical:
-
-| $\theta$ | $\cos\theta$ | Tipping moment $M_{\text{tip}}$ |
-|---|---|---|
-| 0° (horizontal) | 1.00 | [FILL IN] — worst case |
-| 30° | 0.87 | [FILL IN] |
-| 60° | 0.50 | [FILL IN] |
-| 90° (vertical) | 0.00 | 0 |
-
 | Symbol | Quantity | Value |
 |---|---|---|
 | $m_{\text{cw}}$ | Counterweight mass | 2.5 lb ([FILL IN] kg) |
@@ -199,12 +229,8 @@ Stability requires $M_{\text{restore}} \geq M_{\text{tip}}(\theta)$ across the f
 | $m_{\text{arm}}$ | Total arm mass | [FILL IN] kg |
 | $d_{\text{arm}}$ | Arm CG moment arm at θ = 0 | [FILL IN] cm |
 
-<!-- Optional but strong: replace or supplement the table with a τ-vs-θ plot at docs/img/counterweight-arc.png -->
-
 ---
 
 ## Validation
-
-<!-- Link the measured result here so the analysis connects to real hardware. Keep the number on the page. -->
 
 Demonstrated lift: **800 g** at [FILL IN] cm extension — exceeds the 0.5 kg requirement.
