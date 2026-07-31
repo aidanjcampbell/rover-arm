@@ -144,13 +144,22 @@ Because inertial torque is nominal at this joint and at the wrist joint, those c
 
 | Symbol | Quantity | Value |
 |---|---|---|
-| ... | ... | [FILL IN] |
+| $m_{\text{ew}}$ | Elbow-wrist link mass| 0.04 kg |
+| $L_{\text{ew}}$ | Elbow-wrist link moment| 7.5 cm |
+| $m_{\text{ws}}$ | Wrist servo mass| 0.055 kg |
+| $L_{\text{ws}}$ | Wrist servo moment | 13 cm |
+| $m_{\text{f}}$ | Fork mass| 0.03 kg |
+| $L_{\text{f}}$ | Fork moment| 15 cm |
+| $m_{\text{p}}$ | Payload  mass| 0.5 kg |
+| $L_{\text{p}}$ | Payload  moment| 17 cm |
+
 
 ```math
-\tau_{\text{[joint]}} = \sum_i m_i \cdot L_i \cdot \cos 0^\circ = [\text{FILL IN}]\ \text{kgf·cm}
+\tau_{\text{elbow}} = \sum m \cdot L \cdot \cos 0^\circ = \text{9.9}\ \text{kgf·cm}
 ```
 
-Required stall torque (× 2.6): **[FILL IN] kgf·cm** → **ST3215** selected, rated [FILL IN] kgf·cm.
+
+Required stall torque (× 2.64): **26.14 kgf·cm** → **ST3215** selected, rated 30 kgf·cm.
 
 ---
 
@@ -158,13 +167,18 @@ Required stall torque (× 2.6): **[FILL IN] kgf·cm** → **ST3215** selected, r
 
 | Symbol | Quantity | Value |
 |---|---|---|
-| ... | ... | [FILL IN] |
+| $m_{\text{f}}$ | Fork mass| 0.03 kg |
+| $L_{\text{f}}$ | Fork moment| 2 cm |
+| $m_{\text{p}}$ | Payload mass| 0.5 kg |
+| $L_{\text{f}}$ | Payload moment| 4 cm |
+
+
 
 ```math
-\tau_{\text{[joint]}} = \sum_i m_i \cdot L_i \cdot \cos 0^\circ = [\text{FILL IN}]\ \text{kgf·cm}
+\tau_{\text{wrist}} = \sum m \cdot L \cdot \cos 0^\circ = \text{2.06}\ \text{kgf·cm}
 ```
 
-Required stall torque (× 2.6): **[FILL IN] kgf·cm** → **ST3215** selected, rated [FILL IN] kgf·cm.
+Required stall torque (× 2.6): **5.44 kgf·cm** → **ST3215** selected, rated 30 kgf·cm.
 
 ---
 ## Counterweight torque
@@ -186,7 +200,7 @@ Plate spec: one 2.5 lb steel plate = **1.134 kg**.
 \tau_{cw} = m_{cw} \cdot d_{cw} = 1.134 \times 23 = 26.082\ \text{kgf·cm}
 ```
 
-This 26.082 kgf·cm is the restoring torque the counterweight directly provides, sizing the arm to lift a 0.5 kg (500 g) payload at full extension. Combined with the chassis restoring moment, it yields the full stability margin recorded in the tip-over section.
+This 26.082 kgf·cm is the restoring torque the counterweight directly provides, sizing the arm to lift a 0.5 kg (500 g) payload at full extension. Combined with the chassis restoring moment, it yields the full stability margin recorded below.
 
 ### Two plates — 1.0 kg payload
 
@@ -203,34 +217,58 @@ Doubling the payload to 1.0 kg (1000 g) doubles the tipping moment the counterwe
 | 0.5 kg (500 g) | 1 × 2.5 lb plate | 1.134 kg | 23 cm | 26.082 kgf·cm |
 | 1.0 kg (1000 g) | 2 × 2.5 lb plates | 2.267 kg | 23 cm | 52.141 kgf·cm |
 
-With the moment arm held constant at 23 cm, each 2.5 lb plate contributes a fixed **26.082 kgf·cm** of restoring torque. The counterweight requirement therefore scales one plate per 500 g of payload — a linear, easily-extended sizing rule rather than a one-off value.
+With the moment arm held constant at 23 cm, each 2.5 lb plate contributes a fixed **26.082 kgf·cm** of restoring torque. The counterweight requirement therefore scales roughly one plate per 500 g of payload, which makes the modular system an easily extended sizing rule rather than a one-off value.
 
-## Counterweight — tip-over moment
+### Stability check: does the counterweight actually keep the rover upright?
 
-The 2.5 lb plate mounted opposite the arm addresses **static stability** (rover tip-over moment about the front edge of the base). This is a **separate problem** from shoulder-servo torque — the counterweight does **not** reduce the torque the shoulder servo must supply.
+Counterweight torque alone isn't the full picture — it has to be checked against everything trying to tip the rover forward: the arm's own structural weight plus the payload.
 
-
-To calculate the torque our counterweight provides, we will assume the arm is in the position most prone to tipping, fully outstretched and horizontal extending out from the front of the rover. By ensuring that our counterweight can support the arm from this position, we also can ensure that the arm will be stable in other positions as well.
-
-There are four main forces of torque in this system:
+| Term | Value |
+|---|---|
+| $\tau_{arm}$ (arm structure) | 2.784 kgf·cm |
+| $\tau_{payload}$ (0.5 kg payload) | 12.000 kgf·cm |
+| **$\tau_{tip}$ (total tipping)** | **14.784 kgf·cm** |
+| $\tau_{chassis}$ (chassis restoring) | 7.7722 kgf·cm |
+| $\tau_{cw}$ (counterweight, 1 plate) | 26.082 kgf·cm |
+| **$\tau_{restore}$ (total restoring)** | **33.854 kgf·cm** |
 
 ```math
-M_{\text{tip}}(\theta) = m_{\text{arm}} \cdot d_{\text{arm}} \cdot \cos\theta
+SF = \frac{\tau_{restore}}{\tau_{tip}} = \frac{33.854}{14.784} = 2.29\times
 ```
+
+Restoring torque exceeds tipping torque by **2.29×** at full extension (θ = 0), the worst-case pose — the rover is stable with meaningful margin, not just barely balanced. And because the system is scalable, we can add another 2.5 lb. plate for every 500g added to the arm load to maintain roughly the same safety factor.
+
+### Dynamic loading margin
+
+The stability check above assumes the arm is stationary. In motion — accelerating a joint or stopping suddenly at a limit — inertial forces briefly add to the tipping side on top of the static gravitational torque. A rigorous treatment would sum $m_i \alpha r_i^2$ across every link mass using a measured angular acceleration, but without that hardware data, I used a conservative padding factor instead.
+
+A **1.5× dynamic multiplier** is applied to the static tipping torque to bound worst-case deceleration (e.g. a hard limit-switch stop):
 
 ```math
-M_{\text{restore}} = m_{\text{cw}} \cdot d_{\text{cw}}
+\tau_{tip,dynamic} = 1.5 \times \tau_{tip,static} = 1.5 \times 14.784 = 22.176\ \text{kgf·cm}
 ```
 
-| Symbol | Quantity | Value |
-|---|---|---|
-| $m_{\text{cw}}$ | Counterweight mass | 2.5 lb ([FILL IN] kg) |
-| $d_{\text{cw}}$ | Counterweight moment arm | [FILL IN] cm |
-| $m_{\text{arm}}$ | Total arm mass | [FILL IN] kg |
-| $d_{\text{arm}}$ | Arm CG moment arm at θ = 0 | [FILL IN] cm |
+Checking this against the existing restoring torque:
 
----
+```math
+SF_{dynamic} = \frac{\tau_{restore}}{\tau_{tip,dynamic}} = \frac{33.854}{22.176} = 1.53\times
+```
 
+The single-plate counterweight still restores the rover with margin under a padded worst-case dynamic load, though — as expected — the margin compresses from 2.29× to 1.53× once motion is accounted for.
+
+**Sizing for a target dynamic margin.** Using the general sizing relationship established above, the minimum plate count for a given dynamic safety factor is:
+
+```math
+n \geq \frac{SF_{target} \cdot 1.5 \cdot \tau_{tip,static} - \tau_{chassis}}{\tau_{cw,plate}}
+```
+
+For example, requiring $SF_{dynamic} \geq 2.0\times$:
+
+```math
+n \geq \frac{2.0(22.176) - 7.7722}{26.082} = \frac{36.580}{26.082} = 1.40 \rightarrow n = 2
+```
+
+**Limitations.** The 1.5× factor is an assumed conservative bound, not a measured value — it was not derived from servo acceleration data. A more precise figure would require measuring joint angular acceleration (α) during a commanded move or hard stop, e.g. via high-speed video, and computing $\tau_{dyn} = \sum m_i \alpha r_i^2$ across the arm's link masses. This is documented as a scoped next step rather than a completed measurement.
 ## Validation
 
 Demonstrated lift: **800 g** at [FILL IN] cm extension — exceeds the 0.5 kg requirement.
