@@ -49,8 +49,8 @@ That left three possibilities I could not tell apart from software:
 These three were physically separable, and I could state in advance what each test would prove:
 
 - **Another servo on the same board.** If it works, the first servo was the problem. If it doesn't, the servo isn't the issue.
-- **Another wire with the same setup.** If it works, the first wire was the problem. If it doesn't, that leaves only the board on my decision tree
-- **The same setup on a second board.** If it works, the original board was defective. If it doesn't, the fault is somewhere I haven't looked yet or with the design of the board itself, testable with a bare-bones ervo controller.
+- **Another wire with the same setup.** If it works, the first wire was the problem. If it doesn't, that leaves only the board on my decision tree.
+- **The same setup on a second board.** If it works, the original board was defective. If it doesn't, the fault is somewhere I haven't looked yet or with the design of the board itself, testable with a bare-bones servo controller.
 
 Stating the expected outcome *before* running the test is what separates a diagnosis from swapping parts and hoping something changes.
 
