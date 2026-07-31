@@ -71,7 +71,7 @@ The elbow-to-wrist link needed high bending stiffness at a very low mass to allo
 
 Passing the payload test exposed the next constraint: at full extension, the combined center of gravity shifts forward of the front wheel contact line and the rover tips. Because this is a *mobile* platform, any counterweight added needs to be modular and fixed opposite the arm on the rotating base to counter the torque applied to the arm in any position. 
 
-Result: I developed and designed a modular counterweight system adaptable to any load the rover might undertake using readily available 2.5 lb. gym plates. The counterweight is estimated to provide 81.5 kg*cm of torque opposite the arm, allowing the arm to lift up to a theoretical maximum of 2.7kg if structures and actuators allowed.
+Result: I developed and designed a modular counterweight system adaptable to any load the rover might undertake using readily available 2.5 lb. gym plates. The counterweight system scales by roughly 1 plate for every 500g added to the arm, allowing the rover to maintain mobility no matter the load. See more [here](torquecalculations.md).
 
 ---
 
