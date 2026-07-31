@@ -24,6 +24,7 @@ Before touching anything, I listed every layer that could produce total silence:
 - a defect on the board itself
 
 Here is my full problem diagnosis tree:
+
 <img src="/media/servodiagnosistree.jpg" width="700">
 
 
