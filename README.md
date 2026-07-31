@@ -159,11 +159,12 @@ Source and structure in [`/src`](src/).
 - **Getting Started** - Prototyped rover base with intention to use Arduino Uno R3 & HC-05 Bluetooth module for wireless control
 - **Architecure Swap** - Swapped Arduino for ESP32 General Robotics Driver after realizing pin limitations (see more [here](docs/wiringdiagrams.md))
 - **Actuator sizing** - Torque & inertia calculations + safety-factor decomposition → ST3250 at shoulder pitch (see calculations [here](torquecalculations.md)).
-- **Servo bus bring-up** — Isolated a driver-board transceiver fault ([case study](docs/servo-issue.md)); first joint motion on replacement board.
-- **Elbow-Wrist Linkage** — Designed/printed lightweight Warren-truss forearm to optimize strength within weight constraints
-- **Payload test passed** — 0.5 kg at 30 cm (R1); demonstrated to 0.8 kg.
+- **Servo bus bring-up** - Isolated a driver-board transceiver fault ([case study](docs/servo-issue.md)); first joint motion on replacement board.
+- **Elbow-Wrist Linkage** - Designed/printed lightweight Warren-truss forearm to optimize strength within weight constraints
+- **Payload test passed** - 0.5 kg at 30 cm (R1); demonstrated to 0.8 kg.
 - **Base stability** — Diagnosed forward tipping resulting from heavy loads lifted by the arm and designed and printed a modular counterweight structure that could be variably loaded depending on arm load
-- **Shoulder Joint Failure** - When lifting 1000g, the shoulder-elbow linkage deformed where it mounted to the shoulder servo and caused the arm to fail. Resolved by increasing the wall thickness and infill percent on the second iteration print
+- **Shoulder Joint Failure** - When lifting 1000g, the shoulder-elbow linkage deformed where it mounted to the shoulder servo and caused the arm to fail (view [here](media/shoulder-joint-failure)). Resolved by increasing the wall thickness and infill percent on the second iteration print.
+- **1000g Payload Test** - Arm successfully lifted 1000g (200% of design target) and demonstrated mobile capability while under that load. Due to heat in the shoulder servo body, testing has been stopped to ensure the rover's continued function.
 
 ---
 
