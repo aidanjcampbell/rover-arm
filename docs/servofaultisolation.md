@@ -18,7 +18,7 @@ While the servo was not functioning, there was a status light visible inside the
 Before touching anything, I listed every layer that could produce total silence:
 
 - my control software
-- the communication settings (speed, wiring orientation, device addresses)
+- the communication settings (servo ID, wiring orientation, device addresses)
 - the physical wiring
 - a defective motor
 - a defect on the board itself
@@ -28,7 +28,7 @@ Here is my full problem diagnosis tree:
 <img src="/media/servodiagnosistree.jpg" width="700">
 
 
-To efficiently work through this tree and eliminate as many potential problems as possible while following the hint the status light gave me, I decided to start on the software side of the tree. In doing this I was able to eliminate any potential software bugs before I tried replacing hardware, which costs time and money. 
+To efficiently work through this tree and eliminate as many potential problems as possible while following the hint the status light gave me, I decided to start on the software side of the tree. In doing this, I was able to eliminate any potential software bugs before I tried replacing hardware, which delays iteration speed with shipping time and costs more money. 
 
 ## Shrinking the problem
 
@@ -36,7 +36,7 @@ The full firmware ran a web interface, motor control, and a wireless connection 
 
 This was the core move: hold everything constant, remove one thing. If the motors worked in the stripped-down program, the fault lived somewhere in the rest of the system. If they still didn't, I'd eliminated an entire category of suspects in a single step.
 
-With that minimal test I confirmed, one check at a time: the board had power, the software was the correct version, the wiring matched the manufacturer's own reference exactly, every valid orientation of the communication wires was tried, and I scanned the full range of possible device addresses at every possible communication speed. Each check closed off a branch. None produced a response.
+With that minimal test I confirmed, one check at a time: the board had power, the software was the correct version, the wiring matched the manufacturer's own reference exactly, every valid orientation of the communication wires was tried, and I scanned the full range of possible servo IDs at every possible communication speed. Each check closed off a branch. None produced a response.
 
 ## The remaining three
 
@@ -56,9 +56,11 @@ Stating the expected outcome *before* running the test is what separates a diagn
 
 ## Resolution
 
-First testing both the new servo and new wire (the servo and wire to be used on the elbow joint), they both produced no result, eliminatng them from the tree.
+I first used a multimeter to test if the board was supplying sufficient power to the servo and if the data line was working, both of which were. As all other functions on the board seemed to work properly, I decided to move on to test the other two possibilities.
 
-I then moved the identical code and hardware steup onto a replacement board. The motors responded immediately.
+But after testing both the new servo and new wire (the servo and wire to be used on the elbow joint), they both produced no result, eliminating them from the tree.
+
+I then moved the identical code and hardware setup onto a replacement board. The motors responded immediately.
 
 Nothing in my software, wiring, or configuration had changed — so the one thing that *did* change was the fault. The original board had a defective communication circuit: either a factory defect or a component I damaged during the development process, either of which would have gone unnoticed as all other functions worked.
 
@@ -66,7 +68,7 @@ Nothing in my software, wiring, or configuration had changed — so the one thin
 
 The fix was trivial: swap a board. That's worth being honest about — the value here was never the fix.
 
-The days went into *earning* the conclusion. A hardware defect is the one root cause that can't be measured directly; no test ever reads "board faulty." It can only be reached by eliminating everything under my control first. Blaming the hardware before that point is a guess; blaming it after is a diagnosis. The discipline was refusing the comfortable assumption — that the new part was fine and the fault was mine — until I had proven where the fault was not.
+The days went into *earning* the conclusion. A hardware defect is the one root cause that can't be measured directly; no test ever reads "board faulty." It can only be reached by eliminating everything under my control first. Blaming the hardware before that point is a guess; blaming it after is a diagnosis. The discipline was refusing the comfortable assumption that the new part was fine until I had concretely proven where the fault was not.
 
 ## Principles
 
