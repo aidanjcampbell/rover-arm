@@ -127,15 +127,17 @@ Result: I developed and designed a modular counterweight system adaptable to any
 
 ## Bill of Materials
 
-*Key components below. [Full BOM — all hardware, quantities, costs (CSV)](docs/full-bom.csv) · [XLSX](docs/full-bom.xlsx)*
+*Key components below. [Full BOM — all hardware, quantities, costs (XLSX)](docs/BOM.xlsx)
 
 | Component | Qty | Spec | Source | Price |
 |---|---|---|---|---|
-| Feetech ST3250 | 1 | 50 kg·cm, 12 V | [Babsco Supply](#) | $77.99 |
-| Feetech ST3215 **(12 V)** | 3 | 30 kg·cm | [DFRobot](#) | $19.90 ea |
-| Waveshare General Driver for Robots | 1 | ESP32 + TB6612FNG + Servo Bus Control| [link](#) | $X |
-| Ovonic 3S LiPo | 1 | 11.1V 2200 mAh XT60 | [link](#) | $X |
-*Last verified: [month year]. Total: ~$X.*
+| Feetech ST3250 | 1 | 50 kgf·cm, 12V | [Babsco Supply](https://shop.babsco.com/feetech-sts3250-50kg-heavy-duty-smart-servo) | $64.99 |
+| Feetech ST3215 12 | 3 | 30 kgf·cm, 12V | [DFRobot](https://www.dfrobot.com/product-2962.html) | $19.90 ea |
+| Waveshare General Driver for Robots | 1 | ESP32 + TB6612FNG + Servo Bus Control| [Amazon](https://www.amazon.com/Multi-Functional-ESP32-WROOM-32-Bluetooth-Communications-Compatible/dp/B0BZLHYBJL/ref=sr_1_2?crid=2X70I97140UVL&dib=eyJ2IjoiMSJ9.Qyy5JpWZVMOQAArPpvWQb1AhzzfMAPLMIgsMUYPC83mh793Pu2iuxlsDr73dC-eEvAihRaoxWlQTaKoN1ffJHItiUypsE7zhgsDQBir2OVPWklsZlQ8yNga2u20Krc-0RlrBY_QiIJeslw7W6vIPyLah9GjKpbLXJRoLWDFNdnvpTjmCQdbDVQ4sih9uB5aO_ct0vCgJj7_Nj_xZzSFNeyusjApYTRTCCBafkMetzHs.KhaRM6i3_DAIpC6gJnnSmIOD6BadsKU0M5LF1ErKx2k&dib_tag=se&keywords=waveshare+general+robotics+driver&qid=1785364271&sprefix=waveshare+general+robotics+driver%2Caps%2C199&sr=8-2) | $27.99 |
+| Ovonic 3S LiPo | 1 | 11.1V 2200 mAh XT60 | [Amazon](https://www.amazon.com/2200mAh-Connector-Airplane-Quadcopter-Helicopter/dp/B08CZF373Y/ref=sr_1_11?crid=1PP7ODDTYOGMP&dib=eyJ2IjoiMSJ9.iOSWr3M_JHZ9VR8sHd9bgMSiiGApRLvMbo2dmAuFNxfPYa1OoWudkSQXx3j8jNUBqY2dwpkGCyyO8FP7hpkrX7ZnI042PlRQuCzQDilbn9TVTeT5Kbf1NsoFfEKXwrrE9zeMqbBhVeqAwM3D4Ka9YYG7Jc9s-YPQlavun6GTr6pyFDddOGYnPGrEfcAsJtA_EChIi-WRp0FS-Zt9cRvERWU5VlRl8uhEzjkiJzKjXckz6XKlOZweCqsyDzCoiH3B3mr1841YgFYd0CxHaTjQKpnEAJ8eeo_Dm-sj07VuswI.gRa2c_E-S0ACev-dciJZ67Anf647mEQ9EKgyPAOQ0BI&dib_tag=se&keywords=11.1V%2B220mAH%2Blipo%2Bovonic&qid=1785364581&sprefix=11.1v%2B220mah%2Blipo%2Caps%2C148&sr=8-11&th=1) | $16.99 |
+| DC 12V 100RPM Motor | 2 | 100RPM 12V | [Amazon](https://www.amazon.com/Greartisan-Electric-Reduction-Centric-Diameter/dp/B072R57C56/ref=sr_1_5?crid=1A0FK62I470ZI&dib=eyJ2IjoiMSJ9.n8uJGkMnr4Kh8sD-n_JHp0iVcK1ON5Nc-JRtxH72hQWVOoMOjWkENwFX7h1ZLqi8toDa89avcobrDLc0GWA7_lSv4e0OYhpCC_hzYTCpIK1Uw0YJVO9OFmLWvmvEzFNg8PNBdsJGG0DJQ7qmZJ32NVx_-W2aj4pGe7wD9hqyKJC2ZlnKU1V08XDalVTrKV3LplMGrpnlkz_Z8dxxdnvuFx-WE72J_9fMzmB9tAAM48PKzJsRy6Uh79BCXsBlCShlHTEI5dAGvAtNdmQRWMigERbxi6EchFEeW8YzwWxHGKo.PdwCm_5wz4GpXb70i-l5rC5gk3XwGNLnRPAhMFnnFEg&dib_tag=se&keywords=100rpm%2B12v%2Bdc%2Bmotor&qid=1785364453&sprefix=100rpm%2B12v%2Bdc%2Bmotor%2Caps%2C147&sr=8-5&th=1) | $14.99 ea |
+
+*Last verified: August 2026. Total: $330.15.*
 
 ---
 
