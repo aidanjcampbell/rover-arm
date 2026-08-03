@@ -23,6 +23,7 @@ This failure appeared the first time I tested the 1000 g payload. The mounting p
 - **Prototype print settings.** The link holding up the whole arm had been printed at 2 walls and 15% infill — settings that are fine for prototyping but not for carrying large loads. With too few perimeters around the screw bosses, the holes had little material to resist the load and began to deform and elongate until they tore through.
 - **Too few fasteners.** I had used two fasteners at the joint instead of the four the design called for, because two allowed faster disassembly during iteration. That forced the entire arm load through two screws, which was inadequate under heavy payload.
 - **Hand-drilled center hole.** The center hole that lets the plate sit flush on the servo horn had been drilled with a power tool after printing rather than modeled into the part. This left a weak spot at the center of the plate and disrupted the surrounding material, which contributed to the screw holes deforming and failing.
+
 **Fixes, each addressing a specific cause:**
  
 - **Print settings → 3 walls, 25% infill.** The extra perimeters put more solid material around the screw bosses, where the load actually transfers, giving the holes far more resistance to deformation.
