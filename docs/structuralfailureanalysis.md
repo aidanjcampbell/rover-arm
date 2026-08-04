@@ -1,18 +1,18 @@
-# Structural Failure Analysis: Shoulder Joint and Forearm Truss at 1000 g
+# Structural Failure Analysis: Shoulder Joint and Forearm Truss at 1000g
  
-While testing the rover at a 1000 g payload — 200% of its 0.5 kg design target — I encountered two separate structural failures that took the arm out of service. This is a record of both: what failed, why it failed, and what I changed to fix the root cause.
+While testing the rover at a 1000g payload — 200% of its 0.5 kg design target — I encountered two separate structural failures on the arm. This is a record of both: what failed, why it failed, and what I changed to fix the root cause.
  
-The two are worth reading together because they failed for different reasons. The first was a build failure — the design was sound, but the as-built part didn't match it. The second was a design failure — the part was built as intended, but my model of how it would be loaded was incomplete. One taught me to build to spec; the other taught me to question my load assumptions.
+The two are worth reading together because they failed for different reasons. The first was a build failure--the design was sound, but I did not assemble the part correctly. The second was a design failure--the part was built as intended, but my model of how it would be loaded was incomplete. One taught me to build and assemble to spec; the other taught me to question my load assumptions.
  
 ---
  
 ## Failure #1: Shoulder–Elbow Joint
  
 <video src="https://github.com/user-attachments/assets/7db130d6-03f4-4d7d-aa30-b8c59f9642bd" width="600" controls></video>
-*The joint giving way during the first 1000 g payload test.*
+*The joint giving way during the first 1000g payload test.*
  
 <img src="/media/Shoulder-elbow-truss_failure.jpg" width="700">
-*The mounting plate after failure — the screw holes deformed under load.*
+*The mounting plate after failure with the deformed screw holes.*
  
 This failure appeared the first time I tested the 1000 g payload. The mounting plate on the shoulder–elbow link — the plate that bolts to the shoulder servo horn and carries the entire arm — deformed and pulled apart at the screw holes under the accumulated stress of repeated payload tests.
  
@@ -27,7 +27,7 @@ This failure appeared the first time I tested the 1000 g payload. The mounting p
 - **Print settings → 3 walls, 25% infill.** The extra perimeters put more solid material around the screw bosses, where the load actually transfers, giving the holes far more resistance to deformation.
 - **Fasteners → four, with washers and preload.** Going back to the full four-fastener pattern with washers spreads the load across the joint instead of concentrating it on two screws. I also preloaded the bolts more firmly: clamping the plate against the servo horn lets the joint carry load through friction across the whole mating face, taking stress off the screw holes themselves rather than relying on the screws in shear alone.
 - **Center hole → designed into the print.** Modeling the hole into the part kept the surrounding material continuous and the plate's structural integrity intact.
-**Result:** these changes fixed the joint. The reprinted link has passed several further 1000 g tests without deformation.
+**Result:** These changes fixed the joint. The reprinted link has passed several further 1000g tests without deformation.
  
 ---
  
@@ -41,7 +41,7 @@ This failure appeared during a demonstration of the rover lifting 1000 g. Mid-li
  
 **Root cause:**
  
-I had designed the elbow–wrist link to be highly weight-optimized — strong where it needed to be, light everywhere else. Working from that mindset, I gave the top and bottom faces of the truss only a single crossmember each, because I expected the link to carry load only vertically, down the side faces. That reasoning held for a purely vertical load. But when the rover lifts a payload that isn't perfectly balanced, or when the arm accelerates in yaw, the load comes off the vertical axis and tries to twist the link along its length. With only one crossmember per face, the top and bottom behaved as an **open section**, which has very little torsional stiffness — so under that off-axis load, the truss twisted rather than holding its shape.
+I had designed the elbow–wrist link to be highly weight-optimized — strong where it needed to be, light everywhere else. Working from that mindset, I gave the top and bottom faces of the truss only a single crossmember each, because I expected the link to carry load only vertically, down the side faces. That reasoning held for a purely vertical load. But when the rover lifts a payload that isn't perfectly balanced, or when the arm accelerates in the yaw direction, the load comes off the vertical axis and tries to twist the link along its length. With only one crossmember per face, the top and bottom behaved as an **open section**, which has very little torsional stiffness — so under that off-axis load, the truss twisted rather than holding its shape.
  
 **Fix:**
  
@@ -50,10 +50,10 @@ I had designed the elbow–wrist link to be highly weight-optimized — strong w
  
 I redesigned the truss with the same weight-optimization mindset but a corrected understanding of how it would actually be loaded. The change was to run **two crossmembers per face instead of one**. Tying the top and bottom faces together this way further closes the section, better approximating a true closed section. This design resists torsion far better than a fully open one while keeping the lightweight advantage of a truss over a solid beam. The realization behind the fix wasn't "add more material"; it was that I had modeled only the in-plane bending load and missed the torsional load path.
  
-**Result:** the redesigned truss has passed every 1000 g test since, and it holds its shape far better when the arm is loaded during dynamic movement.
+**Result:** the redesigned truss has passed every 1000g test since, and it holds its shape far better when the arm is loaded during dynamic movement.
  
 ---
  
 ## Takeaway
  
-Both failures came from deliberately testing past the design requirement, which is what that testing is for — it found the real limits of the build. The shoulder joint failed because the as-built part drifted from its design under the pressure of rapid iteration; the fix was discipline in fabrication. The forearm truss failed because the design itself was built on an incomplete load model; the fix was a better understanding of the loads. Together they moved the arm from meeting its 0.5 kg target to holding 1000g repeatably.
+Both failures resulted from deliberately testing past the design requirement to reveal the real limits of the build. The shoulder joint failed because the as-built part drifted from its design under the pressure of rapid iteration; the fix was discipline in fabrication. The forearm truss failed because the design itself was built on an incomplete load model; the fix was a better understanding of the loads. Together they moved the arm from meeting its 0.5 kg target to holding 1000g repeatably.
