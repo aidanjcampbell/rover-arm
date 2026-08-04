@@ -98,7 +98,7 @@ Result: I developed and designed a modular counterweight system adaptable to any
     <td align="center"><em>As built with internal electronics</em></td>
   </tr>
   <tr>
-    <td><img src="media/elbow-wrist-link-render.png" width="400"/></td>
+    <td><img src="media/elbow-wrist-link-render.PNG" width="400"/></td>
     <td><img src="media/elbow-wrist-link-photo.jpg" width="400"/></td>
   </tr>
   <tr>
