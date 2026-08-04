@@ -46,7 +46,7 @@ I had designed the elbow–wrist link to be highly weight-optimized — strong w
 **Fix:**
  
 <!-- MEDIA: render or photo of the two-crossmember redesign -->
-<img src="img/your-image.png" width="60%">
+<img src="/media/elbow-wrist-link-photo.jpg" width="700">
  
 I redesigned the truss with the same weight-optimization mindset but a corrected understanding of how it would actually be loaded. The change was to run **two crossmembers per face instead of one**. Tying the top and bottom faces together this way further closes the section, better approximating a true closed section. This design resists torsion far better than a fully open one while keeping the lightweight advantage of a truss over a solid beam. The realization behind the fix wasn't "add more material"; it was that I had modeled only the in-plane bending load and missed the torsional load path.
  
