@@ -8,13 +8,11 @@ The two are worth reading together because they failed for different reasons. Th
  
 ## Failure #1: Shoulder–Elbow Joint
  
-<!-- MEDIA: failure video — drag-and-drop the 1000 g joint-failure clip here on GitHub, or replace the line below -->
-![Shoulder–elbow joint failing during the first 1000 g test](media/shoulder-joint-failure-video)
+<video src="https://github.com/user-attachments/assets/7db130d6-03f4-4d7d-aa30-b8c59f9642bd" width="600" controls></video>
 *The joint giving way during the first 1000 g payload test.*
  
-<!-- MEDIA: photo of the deformed part -->
-![Deformed shoulder–elbow mounting plate](media/shoulder-joint-deformed-part.jpg)
-*The mounting plate after failure — the screw holes deformed and tore out under load.*
+<img src="/media/Shoulder-elbow-truss_failure.jpg" width="700">
+*The mounting plate after failure — the screw holes deformed under load.*
  
 This failure appeared the first time I tested the 1000 g payload. The mounting plate on the shoulder–elbow link — the plate that bolts to the shoulder servo horn and carries the entire arm — deformed and pulled apart at the screw holes under the accumulated stress of repeated payload tests.
  
@@ -35,10 +33,10 @@ This failure appeared the first time I tested the 1000 g payload. The mounting p
  
 ## Failure #2: Elbow–Wrist Forearm Truss
  
-<!-- MEDIA: photo of the twisted/deformed truss -->
-![Twisted elbow–wrist forearm truss](media/forearm-truss-deformed-part.jpg)
+
 *The single-crossmember truss after it twisted under an off-axis load.*
- 
+<img src="/media/Elbow-wrist-truss_deformation.jpg" width="700">
+
 This failure appeared during a demonstration of the rover lifting 1000 g. Mid-lift, the elbow–wrist link twisted along its length and deformed, and the arm failed.
  
 **Root cause:**
@@ -48,8 +46,7 @@ I had designed the elbow–wrist link to be highly weight-optimized — strong w
 **Fix:**
  
 <!-- MEDIA: render or photo of the two-crossmember redesign -->
-![Redesigned two-crossmember truss](media/forearm-truss-redesign.png)
-*The redesign — a second crossmember on each face closes the section toward a box.*
+<img src="img/your-image.png" width="60%">
  
 I redesigned the truss with the same weight-optimization mindset but a corrected understanding of how it would actually be loaded. The change was to run **two crossmembers per face instead of one**. Tying the top and bottom faces together this way closes the section further — better approximating a true closed section, which resists torsion far better than an open one — while keeping the lightweight advantage of a truss over a solid beam. The realization behind the fix wasn't "add more material"; it was that I had modeled only the in-plane bending load and missed the torsional load path entirely.
  
