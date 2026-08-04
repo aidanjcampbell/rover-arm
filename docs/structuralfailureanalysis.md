@@ -48,7 +48,7 @@ I had designed the elbow–wrist link to be highly weight-optimized — strong w
 <!-- MEDIA: render or photo of the two-crossmember redesign -->
 <img src="img/your-image.png" width="60%">
  
-I redesigned the truss with the same weight-optimization mindset but a corrected understanding of how it would actually be loaded. The change was to run **two crossmembers per face instead of one**. Tying the top and bottom faces together this way closes the section further — better approximating a true closed section, which resists torsion far better than an open one — while keeping the lightweight advantage of a truss over a solid beam. The realization behind the fix wasn't "add more material"; it was that I had modeled only the in-plane bending load and missed the torsional load path entirely.
+I redesigned the truss with the same weight-optimization mindset but a corrected understanding of how it would actually be loaded. The change was to run **two crossmembers per face instead of one**. Tying the top and bottom faces together this way further closes the section, better approximating a true closed section. This design resists torsion far better than a fully open one while keeping the lightweight advantage of a truss over a solid beam. The realization behind the fix wasn't "add more material"; it was that I had modeled only the in-plane bending load and missed the torsional load path.
  
 **Result:** the redesigned truss has passed every 1000 g test since, and it holds its shape far better when the arm is loaded during dynamic movement.
  
@@ -56,4 +56,4 @@ I redesigned the truss with the same weight-optimization mindset but a corrected
  
 ## Takeaway
  
-Both failures came from deliberately testing past the design requirement, which is what that testing is for — it found the real limits of the build. The shoulder joint failed because the as-built part drifted from its design under the pressure of rapid iteration; the fix was discipline in fabrication. The forearm truss failed because the design itself was built on an incomplete load model; the fix was a better understanding of the loads. Together they moved the arm from meeting its 0.5 kg target to holding 1000 g repeatably.
+Both failures came from deliberately testing past the design requirement, which is what that testing is for — it found the real limits of the build. The shoulder joint failed because the as-built part drifted from its design under the pressure of rapid iteration; the fix was discipline in fabrication. The forearm truss failed because the design itself was built on an incomplete load model; the fix was a better understanding of the loads. Together they moved the arm from meeting its 0.5 kg target to holding 1000g repeatably.
