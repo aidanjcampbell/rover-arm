@@ -80,7 +80,7 @@ Result: I developed and designed a modular counterweight system adaptable to any
 | # | Requirement | Design response | Verification |
 |---|---|---|---|
 | R1 | Lift 0.5 kg @ 30 cm | ST3250 shoulder + optimized truss designs + modular counterweight system | ✅ **Passed** — held 0.5 kg at full extension; demonstrated to 1.0 kg |
-| R2 | Mobile rover base capable of supporting arm | Differential drive DC motors + custom ball bearing + counterweight | ✅ **Passed** — Rover stays stable while executing rapid maneuvers with an arm payload of 1000g (view the mobility test [here](media/mobility-test.mp4)) |
+| R2 | Mobile rover base capable of supporting arm | Differential drive DC motors + custom ball bearing + counterweight | ✅ **Passed** — Rover stays stable while executing rapid maneuvers with an arm payload of 1000g (view the mobility test [here](media/1000g_mobility_test.mp4)) |
 | R3 | Untethered operation | Onboard WiFi AP + 3S LiPo | ✅ **Passed** — operated for 20 minutes with arm under variable loads |
 | R4 | Consumer-FDM printable | All parts fit P1S bed | ✅ Verified — print inventory in `/cad` |
 
