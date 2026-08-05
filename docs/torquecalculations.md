@@ -50,17 +50,17 @@ Masses are estimated as point masses and lengths as the distances from the cente
 | Symbol | Quantity | Value |
 |---|---|---|
 | $m_p$ | Payload mass | 0.5 kg |
-| $L_p$ | Extension to payload | 30 cm |
-| $m_{\text{se}}$ | Shoulder-elbow link | 0.05 kg |
-| $L_{\text{se}}$ | Sholder-elbow link | 7.5 cm |
-| $m_{\text{es}}$ | Elbow servo | 0.055 kg |
-| $L_{\text{es}}$ | Elbow servo | 13 cm |
-| $m_{\text{ew}}$ | Elbow-wrist link | 0.04 kg |
-| $L_{\text{ew}}$ | Elbow-wrist link | 20.5 cm |
-| $m_{\text{ws}}$ | Wrist servo | 0.055 kg |
-| $L_{\text{ws}}$ | Wrist servo | 26 cm |
-| $m_{\text{f}}$ | Fork | 0.03 kg |
-| $L_{\text{f}}$ | Fork | 28 cm |
+| $L_p$ | Payload moment arm| 30 cm |
+| $m_{\text{se}}$ | Shoulder-elbow link mass | 0.05 kg |
+| $L_{\text{se}}$ | Shoulder-elbow link moment arm| 7.5 cm |
+| $m_{\text{es}}$ | Elbow servo mass | 0.055 kg |
+| $L_{\text{es}}$ | Elbow servo moment arm | 13 cm |
+| $m_{\text{ew}}$ | Elbow-wrist link mass | 0.04 kg |
+| $L_{\text{ew}}$ | Elbow-wrist link moment arm | 20.5 cm |
+| $m_{\text{ws}}$ | Wrist servo mass | 0.055 kg |
+| $L_{\text{ws}}$ | Wrist servo moment arm| 26 cm |
+| $m_{\text{f}}$ | Fork mass | 0.03 kg |
+| $L_{\text{f}}$ | Fork moment arm| 28 cm |
 
 **Static Torque**
 
@@ -141,14 +141,14 @@ Because inertial torque is nominal at this joint and at the wrist joint, those c
 
 | Symbol | Quantity | Value |
 |---|---|---|
-| $m_{\text{ew}}$ | Elbow-wrist link mass| 0.04 kg |
-| $L_{\text{ew}}$ | Elbow-wrist link moment| 7.5 cm |
-| $m_{\text{ws}}$ | Wrist servo mass| 0.055 kg |
-| $L_{\text{ws}}$ | Wrist servo moment | 13 cm |
-| $m_{\text{f}}$ | Fork mass| 0.03 kg |
-| $L_{\text{f}}$ | Fork moment| 15 cm |
-| $m_{\text{p}}$ | Payload  mass| 0.5 kg |
-| $L_{\text{p}}$ | Payload  moment| 17 cm |
+| $m_{\text{ew}}$ | Elbow-wrist link mass | 0.04 kg |
+| $L_{\text{ew}}$ | Elbow-wrist link moment arm | 7.5 cm |
+| $m_{\text{ws}}$ | Wrist servo mass | 0.055 kg |
+| $L_{\text{ws}}$ | Wrist servo moment arm | 13 cm |
+| $m_{\text{f}}$ | Fork mass | 0.03 kg |
+| $L_{\text{f}}$ | Fork moment arm | 15 cm |
+| $m_{\text{p}}$ | Payload  mass | 0.5 kg |
+| $L_{\text{p}}$ | Payload  moment arm | 17 cm |
 
 
 ```math
@@ -164,10 +164,10 @@ Required stall torque (× 2.64): **26.14 kgf·cm** → **ST3215** selected, rate
 
 | Symbol | Quantity | Value |
 |---|---|---|
-| $m_{\text{f}}$ | Fork mass| 0.03 kg |
-| $L_{\text{f}}$ | Fork moment| 2 cm |
-| $m_{\text{p}}$ | Payload mass| 0.5 kg |
-| $L_{\text{f}}$ | Payload moment| 4 cm |
+| $m_{\text{f}}$ | Fork mass | 0.03 kg |
+| $L_{\text{f}}$ | Fork moment arm| 2 cm |
+| $m_{\text{p}}$ | Payload mass | 0.5 kg |
+| $L_{\text{f}}$ | Payload moment arm | 4 cm |
 
 
 
@@ -180,7 +180,7 @@ Required stall torque (× 2.6): **5.44 kgf·cm** → **ST3215** selected, rated 
 ---
 ## Counterweight torque
 
-The counterweight supplies the **restoring moment** that opposes the arm's tipping moment about the front tipping line. Because it is mounted on the shoulder opposite the arm, it swings through the same arc, so its moment arm is the horizontal distance from the tipping line to the plate's center of mass. Because the tipping line at the front wheels is the most prone to flipping, we will calculate the torque from this tipping point.
+The counterweight supplies the **restoring moment** that opposes the arm's tipping moment about the front tipping line. Because it is mounted on the shoulder opposite the arm, it swings through the same arc, so its moment arm is the horizontal distance from the tipping line to the plate's center of mass. Because the tipping line at the front wheels is the most prone to tipping, we will calculate the torque from this point.
 
 Plate spec: one 2.5 lb steel plate = **1.134 kg**.
 
@@ -251,16 +251,5 @@ SF_{dynamic} = \frac{\tau_{restore}}{\tau_{tip,dynamic}} = \frac{33.854}{22.176}
 
 The single-plate counterweight still restores the rover with margin under a padded worst-case dynamic load, though the margin compresses from 2.29× to 1.53× once motion is accounted for.
 
-**Sizing for a target dynamic margin.** Using the general sizing relationship established above, the minimum plate count for a given dynamic safety factor is:
-
-```math
-n \geq \frac{SF_{target} \cdot 1.5 \cdot \tau_{tip,static} - \tau_{chassis}}{\tau_{cw,plate}}
-```
-
-For example, requiring $SF_{dynamic} \geq 2.0\times$:
-
-```math
-n \geq \frac{2.0(22.176) - 7.7722}{26.082} = \frac{36.580}{26.082} = 1.40 \rightarrow n = 2
-```
-
-**Limitations.** The 1.5× factor is an assumed conservative bound, not a measured value — it was not derived from servo acceleration data. A more precise figure would require measuring joint angular acceleration (α) during a commanded move or hard stop, e.g. via high-speed video, and computing $\tau_{dyn} = \sum m_i \alpha r_i^2$ across the arm's link masses. This is documented as a scoped next step rather than a completed measurement.
+**Limitations.** The 1.5× factor is an assumed conservative bound, not a measured value as it was not derived from servo acceleration data. A more precise figure would require measuring joint angular acceleration (α) during a commanded move or hard stop, e.g. via high-speed video, and computing $\tau_{dyn} = \sum m \alpha r^2$ across the arm's link masses. However, the counterweight has proven to be effective as seen in this mobility test video with the 1000g payload:
+<video src="https://github.com/user-attachments/assets/91ab42fd-473b-42c3-9ab9-9755cc8a7e65" width="800" controls></video>
