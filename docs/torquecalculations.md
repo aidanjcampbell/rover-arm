@@ -127,9 +127,9 @@ Converting inertial torque from $\text{N}\cdot\text{m}$ to $\text{kg}\cdot\text{
 | Required stall torque | 52.9 kgf·cm |
 | Servo selected | ST3250 |
 | Rated stall torque | 50 kgf·cm |
-| Margin | 5.5% under |
+| Margin | 5.8% under |
 
-The ST3250 is under our calculated safety factor, giving us a new safety margin of 2.46. This is a deliberate choice, as we included a large error margin in our estimation and friction safety factor calculations. This choice eats into that safety factor by 5.5%, which is an acceptable tolerance. If the margin below the calculated safety factor was larger, we would have to select another servo.
+The ST3250 is under our calculated safety factor, giving us a new safety margin of 2.50. This is a deliberate choice, as we included a large error margin in our estimation and friction safety factor calculations. This choice eats into that safety factor by 5.8%, which is an acceptable tolerance. If the margin below the calculated safety factor was larger, we would have to select another servo. The ST3250 is also the most powerful servo in the ST series, meaning that this is the most torque we can get without changing the architecture again.
 
 ---
 
