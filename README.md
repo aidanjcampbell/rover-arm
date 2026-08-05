@@ -166,7 +166,7 @@ Source and structure in [`/src`](src/).
 - **Payload test passed** - 0.5 kg at 30 cm (R1); demonstrated to 1.0 kg.
 - **Base stability** — Diagnosed forward tipping resulting from heavy loads lifted by the arm and designed and printed a modular counterweight structure that could be variably loaded depending on arm load
 - **Shoulder Joint Failure** - When lifting 1000g, the shoulder-elbow linkage deformed where it mounted to the shoulder servo and caused the arm to fail. Resolved by using a full bolt circle, revised design, and increasing the wall thickness and infill percent on the second iteration print. View the full breakdown [here](docs/structuralfailureanalysis.md).
-- **1000g Payload Test** - Arm successfully lifted 1000g (200% of design target) and demonstrated mobile capability while under that load. Due to heat in the shoulder servo body, testing has been stopped to ensure the rover's continued function.
+- **1000g Payload Test** - Arm successfully lifted 1000g (200% of design target) and demonstrated mobile capability while under that load. Due to high heat in the shoulder servo body and several servo shutdowns after extended periods under load, testing will not progress with heavier weight to ensure the rover's continued function.
 - **Elbow-Wrist Joint Failure** - During a public demonstration of the rover's capabilities the truss twisted under load and deformed, causing the arm to drop the payload. Resolved by adding two new crossmembers to further close both vertical faces of the truss and resist off-axis forces. View the full analysis [here](docs/structuralfailureanalysis.md).
 
 ---
